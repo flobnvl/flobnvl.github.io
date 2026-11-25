@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#f5f5f7; --muted:rgba(255,255,255,.62); --faint:rgba(255,255,255,.14); --line:rgba(255,255,255,.12);
+  --ink:#f5f5f7; --muted:rgba(255,255,255,.7); --faint:rgba(255,255,255,.14); --line:rgba(255,255,255,.12);
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --ui:"Inter Tight",system-ui,sans-serif;
   --glow:rgba(255,240,220,.18);
@@ -38,6 +38,7 @@ img{display:block}
 .g{background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.04) 45%,rgba(255,255,255,.08));backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 24px 60px -24px rgba(0,0,0,.7)}
 .btn{display:inline-flex;align-items:center;gap:12px;padding:12px 14px 12px 22px;border-radius:999px;font-size:14px;font-weight:600;transition:transform .2s,background .2s}
 .btn:hover{transform:translateY(-1px)}
+.cvbtns{display:flex;flex-wrap:wrap;gap:10px}.btn.ghost{background:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
 .btn i{width:28px;height:28px;border-radius:999px;background:#fff;color:#0a0b0d;display:grid;place-items:center;font-style:normal;font-size:14px;transition:transform .3s}
 .btn:hover i{transform:translateX(3px)}
 .btn.plain{padding:12px 20px}
@@ -49,12 +50,15 @@ img{display:block}
 #stage{position:fixed;inset:0;overflow:hidden}
 .bgl{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.72);opacity:0;transition:opacity 1.4s ease}
 .bgl.on{opacity:1}
-#stage::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,5,7,.82) 0%,rgba(4,5,7,.35) 34%,rgba(4,5,7,0) 58%),linear-gradient(0deg,rgba(4,5,7,.85) 0%,rgba(4,5,7,0) 36%)}
+#stage::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,5,7,.82) 0%,rgba(4,5,7,.35) 34%,rgba(4,5,7,0) 58%),linear-gradient(0deg,rgba(4,5,7,.85) 0%,rgba(4,5,7,0) 36%);transition:opacity .8s}
+#stage::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .8s;background:linear-gradient(90deg,rgba(4,5,7,.6) 0%,rgba(4,5,7,.45) 45%,rgba(4,5,7,.12) 75%)}
+body.inpage #stage::before{opacity:1}
+@media (max-width:900px){#stage::before{background:rgba(4,5,7,.35)}}
 
 /* barre */
 #brand{position:fixed;left:var(--pad);top:40px;z-index:60;font-size:15px;font-weight:600;letter-spacing:-.01em;transition:opacity .8s}
 #nav{position:fixed;right:56px;top:30px;z-index:60;display:flex;gap:2px;padding:5px;border-radius:999px;transition:opacity .8s}
-#nav button{padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted);transition:color .2s,background .2s}
+#nav button{padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;color:rgba(255,255,255,.9);transition:color .2s,background .2s}
 #nav button:hover{color:#fff}
 #nav button[aria-current=true]{color:#fff;background:rgba(255,255,255,.14)}
 
@@ -106,8 +110,8 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
 #p-poster{justify-self:center;position:relative;cursor:zoom-in;border-radius:10px;padding:10px;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 #p-poster:hover{transform:translateY(-4px) rotate(-.4deg)}
 #p-poster img{width:auto;max-width:100%;max-height:72vh;border-radius:6px;box-shadow:0 40px 90px -30px rgba(0,0,0,.9)}
-#p-poster .zoom{position:absolute;right:20px;bottom:20px}
-.scrollcue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px}
+#p-poster .zoom{position:absolute;right:20px;bottom:20px;background-color:rgba(10,11,13,.62)}
+.scrollcue{color:rgba(255,255,255,.9);text-shadow:0 1px 10px rgba(0,0,0,.6);position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px}
 .scrollcue span{width:1px;height:34px;background:linear-gradient(#fff,transparent);animation:cue 1.8s ease-in-out infinite}
 @keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
@@ -115,10 +119,10 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
 #p-layers{height:220vh;padding:0}
 #p-layers .stick{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:40px}
 #p-steps{display:flex;flex-direction:column;gap:18px;margin-top:26px}
-#p-steps li{list-style:none;display:flex;gap:14px;align-items:baseline;opacity:.35;transition:opacity .4s}
+#p-steps li{list-style:none;display:flex;gap:14px;align-items:baseline;opacity:.6;transition:opacity .4s}
 #p-steps li.on{opacity:1}
 #p-steps b{font-family:var(--display);font-size:28px;font-weight:900;min-width:34px}
-#p-steps span{font-size:15px;line-height:1.5;color:rgba(255,255,255,.72)}#p-steps strong{font-weight:600;color:#fff}
+#p-steps span{font-size:15px;line-height:1.5;color:rgba(255,255,255,.8)}#p-steps strong{font-weight:600;color:#fff}
 #xs{position:relative;height:100vh;perspective:1400px}
 #xrig{position:absolute;left:50%;top:50%;transform-style:preserve-3d;transition:transform .2s linear}
 .ly{position:absolute;transform-style:preserve-3d;border-radius:4px}
@@ -186,7 +190,7 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
 #chips{display:flex;flex-wrap:wrap;gap:6px;margin:24px 0 36px}
 #chips button{padding:9px 16px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted)}
 #chips button[aria-pressed=true]{color:#0a0b0d;background:#fff}
-#chips sup{font-size:.62em;margin-left:3px;opacity:.65}
+#chips sup{font-size:.62em;margin-left:3px;opacity:.85}
 #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:26px 18px;transition:opacity .4s}
 #grid button{text-align:left;display:flex;flex-direction:column;gap:8px}
 #grid img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.18);transition:transform .3s,border-color .3s}
@@ -218,7 +222,7 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
 .jersey:hover .shirt{fill:rgba(255,255,255,.18)}
 .jersey .num{font-family:var(--display);font-weight:900;font-size:40px;fill:#fff}
 .jersey .hook{fill:none;stroke:rgba(255,255,255,.55);stroke-width:1.5}
-.jersey .name{font-size:13px;font-weight:600;text-align:center}
+.jersey .name{font-size:13px;font-weight:600;text-align:center;text-shadow:0 1px 8px rgba(0,0,0,.75)}
 .cv{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:56px;margin-top:40px}
 .tl{display:flex;flex-direction:column}
 .tl li{list-style:none;display:grid;grid-template-columns:140px minmax(0,1fr);gap:20px;padding:20px 0;border-top:1px solid var(--line)}
@@ -258,7 +262,8 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
 #loader .t i{display:block;width:180px;height:1px;margin:22px auto 0;background:var(--faint);position:relative;overflow:hidden}
 #loader .t i::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left;animation:load 1s ease-out forwards}
 @keyframes load{from{transform:scaleX(0)}}
-#skip{position:absolute;right:28px;bottom:24px;padding:9px 14px;border-radius:999px;color:#fff}
+#skip{position:absolute;right:32px;bottom:32px;padding:14px 26px;border-radius:999px;color:#fff;font-size:14px;letter-spacing:.14em}
+#tunnel{cursor:pointer}
 /* lecture auto bloquée (ex. mode économie d'énergie) : gros bouton Entrer au centre de l'image */
 #tunnel.blocked #skip{right:auto;bottom:auto;left:50%;top:calc(50% + 120px);transform:translateX(-50%);padding:18px 38px;font-size:17px;letter-spacing:.14em;animation:pulse 2.4s ease-in-out infinite}
 @keyframes pulse{50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 0 0 10px rgba(255,255,255,.06),0 24px 60px -24px rgba(0,0,0,.7)}}
@@ -312,7 +317,7 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
 <body class="intro sweep">
 <div id="stage" aria-hidden="true">
   <img class="bgl" data-s="basket" src="img/bg/arena_basket.jpg" alt="">
-  <video class="bgl" data-s="basket" id="vbasket" src="img/bg/arena_basket.mp4" poster="img/bg/arena_basket.jpg" muted autoplay loop playsinline preload="auto"></video>
+  <video class="bgl" data-s="basket" id="vbasket" data-src="img/bg/arena_basket.mp4" poster="img/bg/arena_basket.jpg" muted autoplay loop playsinline preload="none"></video>
   <img class="bgl" data-s="football" src="img/bg/arena_football.jpg" alt="">
   <img class="bgl" data-s="tennis" src="img/bg/arena_tennis.jpg" alt="">
 </div>
@@ -462,7 +467,8 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
           <div class="tags"><span class="g">Français</span><span class="g">Anglais B1</span><span class="g">Espagnol A1</span></div>
           <span class="k">En dehors</span>
           <div class="tags"><span class="g">Basket · joueur et arbitre</span><span class="g">Randonnée et photo</span><span class="g">Romans historiques</span></div>
-          <a class="btn g" href="https://www.linkedin.com/feed/update/urn:li:activity:7477372635413200899/" target="_blank" rel="noopener">Mon CV sur LinkedIn<i>↗</i></a>
+          <div class="cvbtns"><a class="btn g" href="doc/cv-florentin-banneville.pdf" download="CV-Florentin-Banneville.pdf" type="application/pdf">Télécharger mon CV (PDF)<i>↓</i></a>
+<a class="btn g ghost" href="https://www.linkedin.com/feed/update/urn:li:activity:7477372635413200899/" target="_blank" rel="noopener">Mon CV sur LinkedIn<i>↗</i></a></div>
         </div>
       </div>
     </section>
@@ -479,6 +485,7 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
     <div class="crow"><span class="k">E-mail</span><a href="mailto:florentin.banneville@gmail.com">florentin.banneville@gmail.com</a><button class="g" data-copy="florentin.banneville@gmail.com">Copier</button></div>
     <div class="crow"><span class="k">Téléphone</span><a href="tel:+33749968094">07 49 96 80 94</a><button class="g" data-copy="07 49 96 80 94">Copier</button></div>
     <div class="crow"><span class="k">LinkedIn</span><a href="https://www.linkedin.com/in/florentin-banneville" target="_blank" rel="noopener">florentin-banneville</a><span class="k">↗</span></div>
+    <div class="crow"><span class="k">CV</span><a href="doc/cv-florentin-banneville.pdf" download="CV-Florentin-Banneville.pdf">Télécharger mon CV (PDF)</a><span class="k">↓</span></div>
     <div class="crow"><span class="k">Instagram</span><a href="https://www.instagram.com/fl0w_design_/" target="_blank" rel="noopener">@fl0w_design_</a><span class="k">↗</span></div>
     <p class="k" style="margin-top:18px;text-transform:none;letter-spacing:0;font-size:13px">Alternant chez House Of Codesign · ouvert aux projets avec des clubs.</p>
   </div>
@@ -498,7 +505,7 @@ body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #
 </div>
 
 <div id="flash"></div>
-<div id="tunnel"><video id="tv" src="img/bg/entree.mp4" poster="img/bg/entree.jpg" muted playsinline preload="auto"></video><div class="t"><b><i>Florentin</i> <i>Banneville</i></b><span class="k">Entrée des joueurs</span></div><button id="skip" class="g k">Passer →</button></div>
+<div id="tunnel"><video id="tv" poster="img/bg/entree.jpg" muted playsinline preload="auto"></video><div class="t"><b><i>Florentin</i> <i>Banneville</i></b><span class="k">Entrée des joueurs</span></div><button id="skip" class="g k">Passer →</button></div>
 <div id="loader" style="display:none"><div class="t"><b>Florentin Banneville</b><i></i></div></div>
 
 <script>
@@ -520,7 +527,9 @@ function setStage(it){
   const s = SPORT(it);
   if (s !== sportOn){ sportOn = s; $$('.bgl').forEach(el => el.classList.toggle('on', el.dataset.s === s)); $('#sport').textContent = SPORT_FR[s]; }
 }
-const v = $('#vbasket'); v.muted = true; const play = () => v.play().catch(()=>{}); play(); addEventListener('pointerdown', play, {once:true});
+const v = $('#vbasket'); v.muted = true;
+const loadArena = () => { if (!v.src) { v.src = v.dataset.src; v.preload = 'auto'; } };
+const play = () => { loadArena(); v.play().catch(()=>{}); }; addEventListener('pointerdown', play, {once:true});
 
 /* 01 — plaques de la Rangée */
 const plates = ITEMS.map((it,i) => {
@@ -847,12 +856,15 @@ function tunnel(done){
   const finish = (lit) => { if (stop) return; stop = true; v.currentTime = 0; play();
     if (lit === true){ $('#flash').classList.remove('on'); void $('#flash').offsetWidth; $('#flash').classList.add('on'); setTimeout(()=>{ T.style.display = 'none'; done(); }, 380); }
     else { T.style.opacity = 0; setTimeout(()=>{ T.style.display = 'none'; }, 1400); done(); } };
-  $('#skip').onclick = finish; T.onwheel = finish;
+  if (!tv.src) tv.src = innerWidth < 700 ? 'img/bg/entree720.mp4' : 'img/bg/entree.mp4';
+  $('#skip').onclick = e => { e.stopPropagation(); finish(); }; T.onwheel = finish;
+  T.onclick = e => { if (e.target.closest('#skip') || T.classList.contains('blocked')) return; finish(); };   // un clic ou un toucher n'importe où passe au site
   tv.muted = true;
   tv.ontimeupdate = () => { if (!tv.duration) return; if (tv.currentTime > tv.duration - 3.2) T.classList.add('out'); if (tv.currentTime > tv.duration - 0.25) finish(true); };
   tv.onended = () => finish(true); tv.onerror = finish;
   const sk = $('#skip'); sk.textContent = 'Passer →';
   const started = () => { setTimeout(()=>T.classList.add('go'), 500); setTimeout(()=>{ if (!stop && tv.currentTime < 0.2) finish(); }, 9000); };
+  setTimeout(loadArena, 1200);   // la salle se télécharge pendant que le tunnel joue
   tv.play().then(started).catch(()=>{
     // lecture automatique refusée (mode économie d'énergie, etc.) : un toucher lance la vidéo
     sk.textContent = 'Entrer ▶'; T.classList.add('blocked'); setTimeout(()=>T.classList.add('go'), 300);
@@ -863,7 +875,7 @@ function loader(done){
   $('#tunnel').style.display = 'none'; const L = $('#loader'); L.style.display = ''; L.style.opacity = 1;
   setTimeout(()=>{ L.style.opacity = 0; done(); setTimeout(()=>{ L.style.display = 'none'; }, 1300); }, 1100);
 }
-const enter = () => { document.body.classList.remove('intro'); ready = true; target = list.indexOf(START) >= 0 ? list.indexOf(START) : 0; };
+const enter = () => { play(); document.body.classList.remove('intro'); ready = true; target = list.indexOf(START) >= 0 ? list.indexOf(START) : 0; };
 function replayIntro(){ document.body.classList.add('intro','sweep'); sweeping = true; cur = target = list.length + 8; history.replaceState(null, '', '#/'); route(); tunnel(()=>setTimeout(enter, 150)); }
 
 /* démarrage */
