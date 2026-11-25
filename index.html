@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Florentin Banneville — Graphiste sport</title>
+<meta name="description" content="40 affiches de basket, foot et tennis, des clubs de la Sarthe à la NBA. Entrez dans la collection.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://flobnvl.github.io/">
+<meta property="og:title" content="Florentin Banneville — Graphiste sport">
+<meta property="og:description" content="40 affiches de basket, foot et tennis, des clubs de la Sarthe à la NBA. Entrez dans la collection.">
+<meta property="og:image" content="https://flobnvl.github.io/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="artifact-thumbnail" href="og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#f5f5f7; --muted:rgba(255,255,255,.62); --faint:rgba(255,255,255,.14); --line:rgba(255,255,255,.12);
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --ui:"Inter Tight",system-ui,sans-serif;
+  --glow:rgba(255,240,220,.18);
+  --pad:72px; --r:22px;
+  /* Une salle vide, filmée : le stade change avec le sport de l'affiche. L'interface se fait oublier : verre, pastilles, une seule typo d'interface. */
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#050608;color:var(--ink);font-family:var(--ui);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+img{display:block}
+:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:8px}
+.k{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.disp{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:.005em;text-wrap:balance}
+.g{background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.04) 45%,rgba(255,255,255,.08));backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 24px 60px -24px rgba(0,0,0,.7)}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:12px 14px 12px 22px;border-radius:999px;font-size:14px;font-weight:600;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn i{width:28px;height:28px;border-radius:999px;background:#fff;color:#0a0b0d;display:grid;place-items:center;font-style:normal;font-size:14px;transition:transform .3s}
+.btn:hover i{transform:translateX(3px)}
+.btn.plain{padding:12px 20px}
+.pill{display:inline-flex;align-items:center;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:600}
+.draft{position:relative}
+.draft::after{content:"Proposé · à valider";position:absolute;right:0;top:-26px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#ffd58a;opacity:.85}
+
+/* la salle */
+#stage{position:fixed;inset:0;overflow:hidden}
+.bgl{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.72);opacity:0;transition:opacity 1.4s ease}
+.bgl.on{opacity:1}
+#stage::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,5,7,.82) 0%,rgba(4,5,7,.35) 34%,rgba(4,5,7,0) 58%),linear-gradient(0deg,rgba(4,5,7,.85) 0%,rgba(4,5,7,0) 36%)}
+
+/* barre */
+#brand{position:fixed;left:var(--pad);top:40px;z-index:60;font-size:15px;font-weight:600;letter-spacing:-.01em;transition:opacity .8s}
+#nav{position:fixed;right:56px;top:30px;z-index:60;display:flex;gap:2px;padding:5px;border-radius:999px;transition:opacity .8s}
+#nav button{padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted);transition:color .2s,background .2s}
+#nav button:hover{color:#fff}
+#nav button[aria-current=true]{color:#fff;background:rgba(255,255,255,.14)}
+
+/* collection : projet actif */
+#info{position:fixed;left:var(--pad);bottom:132px;width:min(40vw,560px);z-index:10;display:flex;flex-direction:column;gap:14px;transition:opacity .4s}
+#info h1{font-size:clamp(52px,6.1vw,88px)}
+#info p{font-size:18px;color:rgba(255,255,255,.72)}
+#info .btn{align-self:flex-start;margin-top:12px}
+.swap-in{animation:sw .55s cubic-bezier(.2,.7,.2,1)}
+@keyframes sw{from{opacity:0;transform:translateY(14px)}}
+
+/* la rangée */
+#scene{position:fixed;inset:0;perspective:1500px;perspective-origin:55% 50%;z-index:5;transition:opacity .4s}
+#rig{position:absolute;left:57%;top:66%;transform-style:preserve-3d;transform:rotateX(9deg) rotateY(-40deg)}
+.plate{position:absolute;left:0;bottom:0;transform-origin:50% 100%;transform-style:preserve-3d;cursor:pointer;will-change:transform}
+.plate .face{position:absolute;inset:0;border-radius:3px;overflow:hidden;box-shadow:0 30px 50px -20px rgba(0,0,0,.7);-webkit-box-reflect:below 4px linear-gradient(transparent 72%,rgba(255,255,255,.14));transition:box-shadow .6s}
+.plate:not(.dim) .face{box-shadow:0 0 0 1px rgba(255,245,230,.4),0 40px 80px -20px rgba(0,0,0,.95),0 0 130px var(--glow)}
+.plate img{width:100%;height:100%;object-fit:cover;transition:filter .45s}
+.plate .face::after{content:"";position:absolute;inset:0;border:1px solid rgba(220,240,255,.45);border-radius:3px;background:linear-gradient(115deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,0) 62%,rgba(160,210,255,.12) 100%)}
+.plate .edge{position:absolute;top:0;bottom:0;right:-7px;width:14px;transform:rotateY(90deg);background:linear-gradient(90deg,rgba(150,210,255,.55),rgba(220,245,255,.25) 50%,rgba(150,210,255,.5));border-radius:2px}
+.plate.dim img{filter:brightness(.42) saturate(.7)}
+.plate.hide{pointer-events:none}
+#foot{position:fixed;left:var(--pad);right:var(--pad);bottom:60px;z-index:20;display:flex;align-items:center;gap:20px;transition:opacity .4s}
+#foot .bar{flex:1;height:1px;background:var(--faint);position:relative}
+#foot .bar i{position:absolute;left:0;top:0;height:1px;background:#fff;transition:width .3s}
+#count{color:#fff;font-variant-numeric:tabular-nums}
+#hint{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;font-size:11px;transition:opacity .8s;white-space:nowrap}
+body.inpage #scene,body.inpage #info,body.inpage #foot,body.inpage #hint{opacity:0;pointer-events:none}
+body.intro #nav,body.intro #brand,body.intro #info,body.intro #foot,body.intro #hint,body.sweep #info,body.sweep #foot,body.sweep #hint{opacity:0}
+
+/* pages (fiche, index, régie) : couche qui défile au-dessus de la salle */
+.page{position:fixed;inset:0;z-index:40;overflow-y:auto;overflow-x:hidden;display:none;scroll-behavior:smooth}
+.page.on{display:block;animation:fi .5s ease}
+@keyframes fi{from{opacity:0}}
+.page::before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(5,6,8,.35) 0%,rgba(5,6,8,.78) 60%,rgba(5,6,8,.9) 100%);pointer-events:none}
+.wrap{position:relative;max-width:1280px;margin:0 auto;padding:0 var(--pad)}
+.sec{position:relative;padding:120px 0}
+.sec h2{font-size:clamp(44px,5vw,72px);margin:12px 0 22px}
+.lead{font-size:clamp(18px,1.6vw,22px);line-height:1.5;color:rgba(255,255,255,.86);max-width:44ch}
+.txt{font-size:16px;line-height:1.6;color:rgba(255,255,255,.78);max-width:56ch}
+
+/* 02 — en-tête de fiche */
+#p-hero{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:48px;padding:120px 0 80px}
+#p-hero h1{font-size:clamp(56px,6.4vw,104px);margin:14px 0 12px;overflow-wrap:anywhere}
+#p-hero .sub{font-size:20px;color:rgba(255,255,255,.75)}
+#p-hero .brief{margin-top:34px;max-width:46ch}
+#p-hero .brief p{font-size:19px;line-height:1.5;color:rgba(255,255,255,.9);margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+#p-poster{justify-self:center;position:relative;cursor:zoom-in;border-radius:10px;padding:10px;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+#p-poster:hover{transform:translateY(-4px) rotate(-.4deg)}
+#p-poster img{width:auto;max-width:100%;max-height:72vh;border-radius:6px;box-shadow:0 40px 90px -30px rgba(0,0,0,.9)}
+#p-poster .zoom{position:absolute;right:20px;bottom:20px}
+.scrollcue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px}
+.scrollcue span{width:1px;height:34px;background:linear-gradient(#fff,transparent);animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* 02b — décomposition pilotée par le défilement */
+#p-layers{height:220vh;padding:0}
+#p-layers .stick{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:40px}
+#p-steps{display:flex;flex-direction:column;gap:18px;margin-top:26px}
+#p-steps li{list-style:none;display:flex;gap:14px;align-items:baseline;opacity:.35;transition:opacity .4s}
+#p-steps li.on{opacity:1}
+#p-steps b{font-family:var(--display);font-size:28px;font-weight:900;min-width:34px}
+#p-steps span{font-size:15px;line-height:1.5;color:rgba(255,255,255,.72)}#p-steps strong{font-weight:600;color:#fff}
+#xs{position:relative;height:100vh;perspective:1400px}
+#xrig{position:absolute;left:50%;top:50%;transform-style:preserve-3d;transition:transform .2s linear}
+.ly{position:absolute;transform-style:preserve-3d;border-radius:4px}
+.ly img{width:100%;height:100%;border-radius:4px}
+.ly.back img{filter:blur(22px) saturate(1.6);opacity:.85}
+.ly.poster{box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.ly.glass{background:linear-gradient(125deg,rgba(255,255,255,.42),rgba(255,255,255,.06) 30%,rgba(255,255,255,.1) 60%,rgba(255,255,255,.26));border:1px solid rgba(255,255,255,.6)}
+.ly.frame{border:1.5px solid rgba(255,255,255,.85);box-shadow:inset 0 0 0 10px rgba(255,255,255,.08)}
+.ly{transition:opacity .35s}
+.ly.psd{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.03)}
+.ly.psd.base{background:#000;border-color:rgba(255,255,255,.28)}
+.ly.psd::after{content:"";position:absolute;inset:0;border-radius:4px;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.14),transparent 32%,transparent 72%,rgba(255,255,255,.07))}
+.ly.cover{box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.ly.dim{opacity:.12}
+#p-steps li{cursor:default}
+.ly .lbl{position:absolute;left:0;top:-40px;white-space:nowrap;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-radius:999px;transition:opacity .4s}
+
+/* 02c — dans le détail : pile de cartes */
+#p-formats .frow{display:flex;gap:32px;justify-content:center;align-items:flex-end;margin-top:44px}
+#p-formats figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:14px}
+#p-formats .fm{padding:10px;border-radius:16px;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+#p-formats .fm img{display:block;width:100%;height:100%;object-fit:cover;border-radius:7px}
+#p-formats .fm:hover{transform:translateY(-8px)}
+#p-formats figcaption{white-space:nowrap;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+#p-detail .grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px;align-items:center}
+#stack{position:relative;height:560px}
+.card{position:absolute;left:50%;top:50%;width:250px;height:334px;margin:-167px 0 0 -125px;border-radius:18px;overflow:hidden;cursor:zoom-in;background-repeat:no-repeat;box-shadow:0 30px 70px -25px rgba(0,0,0,.9),inset 0 0 0 1px rgba(255,255,255,.22);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.card .tag{position:absolute;left:12px;bottom:12px}
+#stack .card:nth-child(1){transform:rotate(-8deg) translate(-40px,10px)}
+#stack .card:nth-child(2){transform:rotate(-3deg) translate(-14px,0)}
+#stack .card:nth-child(3){transform:rotate(3deg) translate(14px,-4px)}
+#stack .card:nth-child(4){transform:rotate(7deg) translate(40px,6px)}
+#stack:hover .card:nth-child(1){transform:rotate(-10deg) translate(-200px,18px)}
+#stack:hover .card:nth-child(2){transform:rotate(-4deg) translate(-68px,-8px)}
+#stack:hover .card:nth-child(3){transform:rotate(4deg) translate(68px,-8px)}
+#stack:hover .card:nth-child(4){transform:rotate(10deg) translate(200px,18px)}
+
+/* 02d — contexte et résultat */
+#p-facts .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px}
+.fact{border-radius:var(--r);padding:26px 26px 30px;display:flex;flex-direction:column;gap:12px;min-height:190px}
+.fact p{font-size:17px;line-height:1.5;color:rgba(255,255,255,.9)}
+
+/* 02e — prochain match */
+#p-next a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:36px;border-radius:28px;padding:22px 36px 22px 22px;transition:transform .3s}
+#p-next a:hover{transform:translateY(-3px)}
+#p-next img{width:150px;height:200px;object-fit:cover;border-radius:12px}
+#p-next h3{font-size:clamp(40px,4.6vw,72px)}
+#p-next .arrow{width:64px;height:64px;border-radius:999px;background:#fff;color:#0a0b0d;display:grid;place-items:center;font-size:24px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;padding:40px 0 70px;border-top:1px solid var(--line);margin-top:80px}
+
+/* 06 — plein écran, loupe en verre liquide */
+#viewer{position:fixed;inset:0;z-index:80;display:none;touch-action:none;background:rgba(3,4,6,.94);backdrop-filter:blur(10px)}
+#viewer.on{display:block;animation:fi .35s ease}
+#viewer img{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:88vw;max-height:88vh;border-radius:6px;box-shadow:0 40px 120px -30px #000;cursor:none}
+#loupe{position:fixed;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;pointer-events:none;background-repeat:no-repeat;opacity:0;transition:opacity .2s;box-shadow:0 0 0 1px rgba(255,255,255,.55),inset 0 0 0 6px rgba(255,255,255,.08),inset 0 10px 22px rgba(255,255,255,.28),inset 0 -14px 24px rgba(0,0,0,.35),0 20px 50px rgba(0,0,0,.6)}
+#loupe::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(80% 50% at 35% 18%,rgba(255,255,255,.35),rgba(255,255,255,0) 60%)}
+#viewer .vbar{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px;border-radius:999px}
+#viewer .vbar button{width:44px;height:44px;border-radius:999px;font-size:16px}
+#viewer .vbar span{padding:0 14px;font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap}
+#vclose{position:absolute;right:56px;top:30px}
+
+/* 01b — index */
+#index .wrap{padding-top:120px;padding-bottom:80px}
+#index h1{font-size:clamp(64px,8vw,120px)}
+#chips{display:flex;flex-wrap:wrap;gap:6px;margin:24px 0 36px}
+#chips button{padding:9px 16px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted)}
+#chips button[aria-pressed=true]{color:#0a0b0d;background:#fff}
+#chips sup{font-size:.62em;margin-left:3px;opacity:.65}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:26px 18px;transition:opacity .4s}
+#grid button{text-align:left;display:flex;flex-direction:column;gap:8px}
+#grid img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.18);transition:transform .3s,border-color .3s}
+#grid button:hover img{transform:translateY(-4px);border-color:#fff}
+#grid span{font-size:12px;line-height:1.3;color:var(--muted)}
+.card-deal{position:fixed;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.18);pointer-events:none;will-change:transform;backface-visibility:hidden}
+#grid.dealing img{opacity:0;transition:none}#grid.dealing .landed img{opacity:1}
+#grid span{transition:opacity .5s}#grid.dealing span{opacity:0}
+
+/* 04 — régie */
+#regie .wrap{padding-top:120px}
+#r-hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:36px;align-items:center;padding-bottom:70px}
+#r-hero img{width:148px;height:148px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px rgba(255,255,255,.3),0 20px 50px -20px #000}
+#r-hero h1{font-size:clamp(56px,7vw,104px);margin:10px 0 14px}
+.status{display:inline-flex;align-items:center;gap:10px}
+.status i{width:8px;height:8px;border-radius:50%;background:#5be38a;box-shadow:0 0 10px #5be38a}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:34px}
+.cell{border-radius:var(--r);padding:22px}
+.cell b{display:block;font-family:var(--display);font-weight:900;font-size:64px;line-height:.9;font-variant-numeric:tabular-nums;margin-bottom:8px}
+#rack{position:relative;margin-top:50px;padding:0 10px}
+#rack .rail{height:10px;border-radius:999px}
+#rackcap{display:none;flex-direction:column;align-items:center;gap:10px;margin-top:22px;text-align:center;min-height:86px}
+#rackcap b{font-size:16px;font-weight:600}#rackcap span{font-size:13px;color:var(--muted)}#rackcap button{padding:10px 18px;border-radius:999px;font-size:14px;font-weight:500}
+#rack .hang{display:flex;justify-content:space-between;gap:8px;margin-top:-4px}
+.jersey{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;transform-origin:50% 0;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.jersey:hover{transform:rotate(3deg) translateY(4px)}
+.jersey svg{width:100%;max-width:130px;overflow:visible}
+.jersey .shirt{fill:rgba(255,255,255,.09);stroke:rgba(255,255,255,.55);stroke-width:1.2}
+.jersey:hover .shirt{fill:rgba(255,255,255,.18)}
+.jersey .num{font-family:var(--display);font-weight:900;font-size:40px;fill:#fff}
+.jersey .hook{fill:none;stroke:rgba(255,255,255,.55);stroke-width:1.5}
+.jersey .name{font-size:13px;font-weight:600;text-align:center}
+.cv{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:56px;margin-top:40px}
+.tl{display:flex;flex-direction:column}
+.tl li{list-style:none;display:grid;grid-template-columns:140px minmax(0,1fr);gap:20px;padding:20px 0;border-top:1px solid var(--line)}
+.tl b{display:block;font-size:17px;font-weight:600;margin-bottom:4px}
+.tl small{display:block;font-size:14px;color:var(--muted);margin-bottom:8px}
+.tl p{font-size:15px;line-height:1.55;color:rgba(255,255,255,.78)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 30px}
+.tags span{padding:8px 14px;border-radius:999px;font-size:13px;font-weight:500}
+
+/* 05 — contact */
+#contact{position:fixed;inset:0;z-index:75;display:none;place-items:center;background:rgba(3,4,6,.5);backdrop-filter:blur(6px)}
+#contact.on{display:grid;animation:fi .3s ease}
+#contact .panel{width:min(560px,92vw);border-radius:30px;padding:40px 40px 32px;position:relative;animation:up .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes up{from{transform:translateY(24px) scale(.98);opacity:0}}
+#contact h2{font-size:56px;margin:10px 0 24px}
+.crow{display:grid;grid-template-columns:110px minmax(0,1fr) auto;align-items:center;gap:12px;padding:16px 0;border-top:1px solid var(--line)}
+.crow a{font-size:17px;font-weight:600;overflow-wrap:anywhere}
+.crow button{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:600}
+#cclose{position:absolute;right:18px;top:18px;width:40px;height:40px;border-radius:999px}
+
+/* 404 */
+#offside{position:fixed;inset:0;z-index:78;display:none;place-items:center;text-align:center;background:rgba(5,6,8,.82)}
+#offside.on{display:grid;animation:fi .4s}
+#offside h1{font-size:clamp(90px,16vw,220px)}
+
+/* entrée : tunnel (1re visite) et retour rapide */
+#tunnel,#loader{position:fixed;inset:0;z-index:90;background:#000;transition:opacity 1.3s ease}
+#tunnel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#tunnel .t,#loader .t{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;pointer-events:none}
+#tunnel .t b i{font-style:normal}
+#tunnel .t b,#loader .t b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(40px,7vw,110px);text-transform:uppercase;letter-spacing:.02em;opacity:0;transition:opacity .8s,letter-spacing 2.6s}
+#tunnel .t span{opacity:0;transition:opacity .8s .4s}
+#tunnel.go .t b{opacity:1;letter-spacing:.12em}
+#tunnel.go .t span{opacity:1}
+#tunnel.out .t b,#tunnel.out .t span{opacity:0;transition:opacity 1s}
+#loader .t b{opacity:1;letter-spacing:.12em;font-size:clamp(28px,4vw,56px)}
+#loader .t i{display:block;width:180px;height:1px;margin:22px auto 0;background:var(--faint);position:relative;overflow:hidden}
+#loader .t i::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left;animation:load 1s ease-out forwards}
+@keyframes load{from{transform:scaleX(0)}}
+#skip{position:absolute;right:28px;bottom:24px;padding:9px 14px;border-radius:999px;color:#fff}
+/* lecture auto bloquée (ex. mode économie d'énergie) : gros bouton Entrer au centre de l'image */
+#tunnel.blocked #skip{right:auto;bottom:auto;left:50%;top:calc(50% + 120px);transform:translateX(-50%);padding:18px 38px;font-size:17px;letter-spacing:.14em;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 0 0 10px rgba(255,255,255,.06),0 24px 60px -24px rgba(0,0,0,.7)}}
+#flash{position:fixed;inset:0;z-index:95;pointer-events:none;opacity:0;background:radial-gradient(60% 60% at 50% 45%,#fff 0%,rgba(235,242,255,.92) 45%,rgba(200,215,235,.75) 100%)}
+#flash.on{animation:flash 1.5s ease-out forwards}
+@keyframes flash{0%{opacity:0}14%{opacity:1}26%{opacity:1}100%{opacity:0}}
+
+@media (max-width:900px){
+  :root{--pad:22px}
+  #brand{top:28px}#nav{right:12px;top:62px}
+  #info{left:var(--pad);right:var(--pad);width:auto;bottom:96px}
+  #foot{bottom:44px}#rig{left:52%;top:46%}
+  #p-hero,#p-layers .stick,#p-detail .grid,.cv{grid-template-columns:1fr}
+  #p-hero{padding-top:140px}
+  /* décomposition : l'écran reste fixe, le défilement ne fait qu'ouvrir les calques */
+  #p-layers{height:300vh}
+  #p-layers .stick{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;gap:0;padding-top:118px;padding-bottom:18px}
+  #p-layers .stick .k{margin:0}
+  #p-layers h2{font-size:34px;margin:4px 0 8px}
+  #p-layers .txt,#p-lnote{display:none}
+  #p-steps{margin-top:4px;min-height:46px}#p-steps li{display:none}#p-steps li.cur{display:flex}
+  #xs{flex:1;height:auto;min-height:0}
+  #stack{height:460px}#stack:hover .card:nth-child(1){transform:rotate(-8deg) translate(-90px,10px)}#stack:hover .card:nth-child(4){transform:rotate(8deg) translate(90px,10px)}#stack:hover .card:nth-child(2),#stack:hover .card:nth-child(3){transform:none}
+  #p-facts .row,.board{grid-template-columns:1fr 1fr}
+  #p-next a{grid-template-columns:auto minmax(0,1fr);gap:18px}#p-next .arrow{display:none}#p-next img{width:96px;height:128px}
+  #r-hero{grid-template-columns:1fr}
+  /* portant : tous les maillots sur la même tringle, qui se chevauchent */
+  #rack .hang{flex-wrap:nowrap;justify-content:center;gap:0;padding-right:4px}
+  .jersey{flex:0 0 84px;width:84px;margin-left:-41px;position:relative}
+  .jersey:first-child{margin-left:0}
+  .jersey:nth-child(odd){transform:rotate(-2deg)}.jersey:nth-child(even){transform:rotate(1.5deg) translateY(3px)}
+  .jersey .name{display:none}
+  .jersey.sel{transform:translateY(14px) scale(1.12);z-index:20}
+  .jersey.sel .shirt{fill:rgba(255,255,255,.24);stroke:#fff}
+  .jersey:hover{transform:none}
+  #rackcap{display:flex}
+  .tl li{grid-template-columns:1fr;gap:6px}
+  .crow{grid-template-columns:1fr auto}.crow .k{grid-column:1/-1}
+  #vclose{right:16px;top:16px}
+  #tunnel .t b i{display:block}
+  #p-chips{flex-wrap:nowrap;gap:6px}#p-chips .pill{padding:7px 11px;font-size:12px;white-space:nowrap}
+  .plate .face{-webkit-box-reflect:none}
+  .plate,#p-poster,#xs,#stack,#p-frow{touch-action:pan-y}
+  #info h1{font-size:44px}
+  body.inpage::before{content:'';position:fixed;left:0;right:0;top:0;height:112px;z-index:55;pointer-events:none;background:linear-gradient(#000 0,rgba(0,0,0,.82) 62%,transparent)}
+  #hint{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}video.bgl{display:none}}
+</style>
+</head>
+<body class="intro sweep">
+<div id="stage" aria-hidden="true">
+  <img class="bgl" data-s="basket" src="img/bg/arena_basket.jpg" alt="">
+  <video class="bgl" data-s="basket" id="vbasket" src="img/bg/arena_basket.mp4" poster="img/bg/arena_basket.jpg" muted autoplay loop playsinline preload="auto"></video>
+  <img class="bgl" data-s="football" src="img/bg/arena_football.jpg" alt="">
+  <img class="bgl" data-s="tennis" src="img/bg/arena_tennis.jpg" alt="">
+</div>
+
+<a id="brand" href="#/" aria-label="Accueil">Florentin Banneville</a>
+<nav id="nav" class="g" aria-label="Navigation principale">
+  <button data-go="#/">Collection</button>
+  <button data-go="#/index">Index</button>
+  <button data-go="#/regie">Régie</button>
+  <button data-go="contact">Contact</button>
+</nav>
+
+<!-- 01 — la Rangée -->
+<section id="info" aria-live="polite"></section>
+<div id="scene" aria-label="Collection d'affiches"><div id="rig"></div></div>
+<div id="foot"><button id="filt" class="pill g" style="display:none"></button><span class="k" id="sport">Basket</span><div class="bar"><i id="prog"></i></div><span class="k" id="count">01 / 40</span></div>
+<div class="k" id="hint">Molette, flèches ou glisser · après la dernière affiche, l'index</div>
+
+<!-- 02 — fiche projet -->
+<main id="proj" class="page" aria-label="Fiche projet">
+  <div class="wrap">
+    <section id="p-hero">
+      <div>
+        <a href="#/" class="k" style="color:#fff">← Collection</a>
+        <div class="k" id="p-crumb" style="margin-top:34px"></div>
+        <h1 class="disp" id="p-title"></h1>
+        <p class="sub" id="p-sub"></p>
+        <div class="brief draft"><span class="k">Le brief</span><p id="p-brief"></p></div>
+        <div class="chips" id="p-chips"></div>
+      </div>
+      <button id="p-poster" class="g" aria-label="Voir l'affiche en plein écran"><img id="p-img" alt=""><span class="pill g zoom">Plein écran ⤢</span></button>
+      <div class="scrollcue k">Défiler<span></span></div>
+    </section>
+  </div>
+  <section id="p-layers" class="sec">
+    <div class="wrap stick">
+      <div>
+        <span class="k">La décomposition</span>
+        <h2 class="disp">Plaque par plaque</h2>
+        <p class="txt"><span id="p-lintro">Chaque couche de l'affiche posée sur sa propre plaque de verre.</span> Fais défiler pour l'ouvrir, bouge la souris pour tourner autour, survole une étape pour l'isoler.</p>
+        <ul id="p-steps"></ul>
+        <p class="k" id="p-lnote" style="margin-top:26px"></p>
+      </div>
+      <div id="xs"><div id="xrig"></div></div>
+    </div>
+  </section>
+  <section id="p-formats" class="sec">
+    <div class="wrap">
+      <span class="k">Déclinaisons</span>
+      <h2 class="disp">Un visuel, chaque format</h2>
+      <p class="txt">La même affiche pensée pour chaque écran : le post pour le fil, la story en plein écran. Clique sur un format pour l'ouvrir en grand.</p>
+      <div class="frow" id="p-frow"></div>
+    </div>
+  </section>
+  <section id="p-detail" class="sec">
+    <div class="wrap grid">
+      <div>
+        <span class="k">Dans le détail</span>
+        <h2 class="disp">De près</h2>
+        <p class="txt">La typo, la matière, les petits choix qu'on ne voit pas de loin. Survole la pile pour l'ouvrir, clique sur une carte pour zoomer.</p>
+      </div>
+      <div id="stack"></div>
+    </div>
+  </section>
+  <section id="p-facts" class="sec">
+    <div class="wrap">
+      <span class="k">Contexte &amp; résultat</span>
+      <h2 class="disp">Le match derrière l'affiche</h2>
+      <p class="lead" id="p-ctx"></p>
+      <div class="row">
+        <div class="fact g"><span class="k">Pour qui</span><p id="p-q"></p></div>
+        <div class="fact g"><span class="k">À quoi ça a servi</span><p id="p-u"></p></div>
+        <div class="fact g"><span class="k">Résultat</span><p id="p-r"></p></div>
+      </div>
+    </div>
+  </section>
+  <section id="p-next" class="sec" style="padding-top:40px">
+    <div class="wrap">
+      <span class="k">Prochain match</span>
+      <a id="p-nexta" class="g" href="#/" style="margin-top:18px"><img id="p-nimg" alt=""><div><span class="k" id="p-ncrumb"></span><h3 class="disp" id="p-ntitle" style="margin-top:8px"></h3></div><span class="arrow">→</span></a>
+      <div class="pfoot"><a id="p-preva" class="k" href="#/" style="color:#fff">← Match précédent</a><a href="#/" class="btn g">Retour à la collection<i>→</i></a></div>
+    </div>
+  </section>
+</main>
+
+<!-- 01b — index -->
+<main id="index" class="page" aria-label="Index">
+  <div class="wrap">
+    <span class="k">Index · 40 affiches</span>
+    <h1 class="disp" style="margin-top:12px">Index</h1>
+    <nav id="chips" aria-label="Filtrer la collection"></nav>
+    <div id="grid"></div>
+  </div>
+</main>
+
+<!-- 04 — régie -->
+<main id="regie" class="page" aria-label="Régie">
+  <div class="wrap">
+    <section id="r-hero">
+      <img src="img/florentin.jpg" alt="Florentin Banneville">
+      <div>
+        <span class="k">La régie</span>
+        <h1 class="disp">Florentin Banneville</h1>
+        <p class="lead">Designer graphique et chargé de communication, spécialisé sport. Je crée des affiches de match depuis 2022, pour des clubs et pour mon compte Instagram <a href="https://www.instagram.com/fl0w_design_/" target="_blank" rel="noopener" style="text-decoration:underline">@fl0w_design_</a>.</p>
+        <div class="chips"><span class="pill g status"><i></i>En alternance chez House Of Codesign</span><span class="pill g">Nantes · Paris</span><button class="pill g" data-go="contact">Me contacter →</button></div>
+      </div>
+    </section>
+    <div class="board" id="board"></div>
+
+    <section class="sec" style="padding-bottom:40px">
+      <span class="k">Le portant des clubs</span>
+      <h2 class="disp">Un maillot par club</h2>
+      <p class="txt">Clique sur un maillot pour voir toutes les affiches de ce club dans la collection.</p>
+      <div id="rack"><div class="rail g"></div><div class="hang" id="hang"></div></div>
+      <div id="rackcap" aria-live="polite"><span>Touche un maillot pour le décrocher</span></div>
+    </section>
+
+    <section class="sec">
+      <span class="k">À propos</span>
+      <h2 class="disp">Sur le terrain et derrière l'écran</h2>
+      <p class="lead">Étudiant en Bachelor Management de projet en Design et Communication (Audencia × L'École de design Nantes Atlantique), je passe d'un brief business à une exécution créative. Le basket occupe ma vie depuis plus de quinze ans : joueur en régional, capitaine, et arbitre officiel depuis cinq ans. La saison dernière, j'ai passé les soirs de match dans les coulisses de l'Hermine de Nantes.</p>
+      <div class="cv">
+        <div>
+          <span class="k">Parcours</span>
+          <ul class="tl" style="margin-top:14px">
+            <li><span class="k">sept. 2026 →</span><div><b>Attaché de communication — House Of Codesign</b><small>Alternance · Saint-Ouen-sur-Seine</small><p>Réseaux sociaux et community management, site web, plan de communication et planning éditorial, photo et vidéo, renfort sur les événements (KickStart Ton Projet).</p></div></li>
+            <li><span class="k">2025 – 2026</span><div><b>Projet de communication — Hermine de Nantes</b><small>Club d'Élite 2 · soirs de match</small><p>Photos et vidéos pour les réseaux du club, interviews d'après-match du coach et des joueurs, vidéo de remerciement des bénévoles publiée par le club.</p></div></li>
+            <li><span class="k">sept. – déc. 2025</span><div><b>Échange international — FAE Business School</b><small>Curitiba, Brésil</small><p>Marketing et management dans un contexte international et interculturel.</p></div></li>
+            <li><span class="k">mai – juil. 2025</span><div><b>Chargé de communication — Multipromatik</b><small>Stage · Nantes</small><p>Supports print et digitaux, contenus visuels, structuration de l'identité graphique (charte Pop'Frais), déploiement de la stratégie de communication.</p></div></li>
+            <li><span class="k">2025</span><div><b>Challenge Auchan Retail — finale nationale</b><small>Projet d'études · 4e place</small><p>Solution contre les ruptures de stock : enquêtes terrain, prototype d'extension de l'application, pitch devant la direction d'Auchan.</p></div></li>
+            <li><span class="k">févr. 2024</span><div><b>Assistant communication — Rétro Futur Muséum</b><small>Paris</small><p>Supports pour le développement des réseaux sociaux du musée.</p></div></li>
+            <li><span class="k">juin 2021</span><div><b>Assistant communication interne — DHI</b><small>Nantes</small><p>Enquêtes auprès des collaborateurs pour le prototypage d'une interface logicielle.</p></div></li>
+          </ul>
+        </div>
+        <div>
+          <span class="k">Formation</span>
+          <ul class="tl" style="margin-top:14px">
+            <li><span class="k">2024 – 2027</span><div><b>Bachelor Management de projet en Design et Communication</b><small>Audencia × L'École de design Nantes Atlantique</small></div></li>
+            <li><span class="k">2025</span><div><b>FAE Centro Universitário</b><small>Échange · Brésil</small></div></li>
+            <li><span class="k">2024</span><div><b>Bac général — Lycée Notre-Dame</b><small>Le Mans · maths, physique</small></div></li>
+          </ul>
+          <span class="k" style="display:block;margin-top:30px">Outils</span>
+          <div class="tags"><span class="g">Photoshop</span><span class="g">Illustrator</span><span class="g">Premiere Pro</span><span class="g">Figma</span><span class="g">Canva</span><span class="g">CapCut</span><span class="g">Miro</span><span class="g">Pack Office</span></div>
+          <span class="k">IA</span>
+          <div class="tags"><span class="g">Google Veo 3</span><span class="g">Kling 3</span><span class="g">Sora 2</span><span class="g">Midjourney</span><span class="g">DALL·E</span></div>
+          <span class="k">Langues</span>
+          <div class="tags"><span class="g">Français</span><span class="g">Anglais B1</span><span class="g">Espagnol A1</span></div>
+          <span class="k">En dehors</span>
+          <div class="tags"><span class="g">Basket · joueur et arbitre</span><span class="g">Randonnée et photo</span><span class="g">Romans historiques</span></div>
+          <a class="btn g" href="https://www.linkedin.com/feed/update/urn:li:activity:7477372635413200899/" target="_blank" rel="noopener">Mon CV sur LinkedIn<i>↗</i></a>
+        </div>
+      </div>
+    </section>
+    <div class="pfoot"><a href="#/entree" class="k" style="color:#fff">Revoir l'entrée des joueurs</a><button class="btn g" data-go="contact">Me contacter<i>→</i></button></div>
+  </div>
+</main>
+
+<!-- 05 — contact -->
+<div id="contact" role="dialog" aria-modal="true" aria-label="Contact">
+  <div class="panel g">
+    <button id="cclose" class="g" aria-label="Fermer">✕</button>
+    <span class="k">Contact</span>
+    <h2 class="disp">On en parle ?</h2>
+    <div class="crow"><span class="k">E-mail</span><a href="mailto:florentin.banneville@gmail.com">florentin.banneville@gmail.com</a><button class="g" data-copy="florentin.banneville@gmail.com">Copier</button></div>
+    <div class="crow"><span class="k">Téléphone</span><a href="tel:+33749968094">07 49 96 80 94</a><button class="g" data-copy="07 49 96 80 94">Copier</button></div>
+    <div class="crow"><span class="k">LinkedIn</span><a href="https://www.linkedin.com/in/florentin-banneville" target="_blank" rel="noopener">florentin-banneville</a><span class="k">↗</span></div>
+    <div class="crow"><span class="k">Instagram</span><a href="https://www.instagram.com/fl0w_design_/" target="_blank" rel="noopener">@fl0w_design_</a><span class="k">↗</span></div>
+    <p class="k" style="margin-top:18px;text-transform:none;letter-spacing:0;font-size:13px">Alternant chez House Of Codesign · ouvert aux projets avec des clubs.</p>
+  </div>
+</div>
+
+<!-- 06 — plein écran -->
+<div id="viewer" role="dialog" aria-modal="true" aria-label="Affiche en plein écran">
+  <img id="v-img" alt="">
+  <div id="loupe"></div>
+  <button id="vclose" class="pill g" aria-label="Fermer">Fermer ✕</button>
+  <div class="vbar g"><button id="vprev" aria-label="Affiche précédente">←</button><span id="v-title"></span><button id="vnext" aria-label="Affiche suivante">→</button></div>
+</div>
+
+<!-- 404 -->
+<div id="offside" role="dialog" aria-label="Page introuvable">
+  <div><span class="k">Erreur 404</span><h1 class="disp">Hors-jeu</h1><p class="lead" style="margin:10px auto 30px">Cette page n'existe pas. Revenez dans le jeu.</p><a class="btn g" href="#/">Retour à la collection<i>→</i></a></div>
+</div>
+
+<div id="flash"></div>
+<div id="tunnel"><video id="tv" src="img/bg/tunnel.mp4" poster="img/bg/tunnel.jpg" muted playsinline preload="auto"></video><div class="t"><b><i>Florentin</i> <i>Banneville</i></b><span class="k">Entrée des joueurs</span></div><button id="skip" class="g k">Passer →</button></div>
+<div id="loader" style="display:none"><div class="t"><b>Florentin Banneville</b><i></i></div></div>
+
+<script>
+const ITEMS = [{"slug": "journee-de-detection-u15-feminines", "t": "Journée de détection — U15 féminines", "y": "2022", "tech": "Photoshop", "ctx": "Une de mes premières affiches, pour le club de basket de Guécélard : journée de détection de l'équipe régionale U15 féminine. Le visuel a été utilisé par le club dans sa communication.", "sub": "Guécélard", "salle": "Les débuts", "cat": "clubs", "st": "Officielle", "r": 0.707, "b": "Donner envie aux jeunes joueuses de venir se montrer : une affiche claire qui pose le cadre (date, lieu, catégorie) et donne de l'ambition à la détection U15 régionale.", "q": "Club de basket de Guécélard (Sarthe)", "u": "Communication du club : annonce de l'événement.", "res": "Visuel utilisé par le club. Mes premières affiches en conditions réelles, avec retours et ajustements."}, {"slug": "guecelard-vs-mulsanne-demi-finale-coupe-de-la-sarthe", "t": "Guécélard vs Mulsanne — Demi-finale Coupe de la Sarthe", "y": "2022", "tech": "Photoshop", "ctx": "Une de mes premières affiches, pour le club de basket de Guécélard : demi-finale de Coupe de la Sarthe face à Mulsanne. Le visuel a été utilisé par le club dans sa communication.", "sub": "Guécélard", "salle": "Les débuts", "cat": "clubs", "st": "Officielle", "r": 0.707, "b": "Faire monter la pression avant une demi-finale de coupe : mettre en scène le duel Guécélard–Mulsanne et rendre l'info du match lisible en un coup d'œil.", "q": "Club de basket de Guécélard (Sarthe)", "u": "Communication du club : annonce de l'événement.", "res": "Visuel utilisé par le club. Mes premières affiches en conditions réelles, avec retours et ajustements."}, {"slug": "we-are-back-montee-en-regional-2", "t": "We Are Back — Montée en Régional 2", "y": "2025", "tech": "Photoshop", "ctx": "Annonce de la montée des U21 du BC Roëze en Régional 2, mise en scène comme une carte d'embarquement. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Annoncer la montée comme un départ en voyage : la carte d'embarquement transforme une info sportive en événement et lance la saison en Régional 2.", "q": "BC Roëze-sur-Sarthe (U21)", "u": "Réseaux sociaux du club : annonce.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe.", "L": [["we-are-back-montee-en-regional-2-0.webp", "Fond"], ["we-are-back-montee-en-regional-2-1.webp", "Photos"], ["we-are-back-montee-en-regional-2-2.webp", "Premier plan"], ["we-are-back-montee-en-regional-2-3.webp", "Lumière & textures"]], "lr": 0.5627}, {"slug": "roeze-vs-nantes-sully", "t": "Roëze vs Nantes Sully", "y": "2026", "tech": "Photoshop", "ctx": "Affiche de match U21 Régional 2, construite comme une grille de photos de l'équipe. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Mettre l'équipe au centre : une grille de photos qui présente le groupe et crée de l'attachement dès les premiers matchs.", "q": "BC Roëze-sur-Sarthe (U21)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe.", "L": [["roeze-vs-nantes-sully-0.webp", "Fond"], ["roeze-vs-nantes-sully-1.webp", "Texte & infos"], ["roeze-vs-nantes-sully-2.webp", "Lumière & textures"], ["roeze-vs-nantes-sully-3.webp", "Sujet"]], "lr": 0.5627}, {"slug": "game-day-bcr-vs-chantonnay", "t": "Game Day — BCR vs Chantonnay", "y": "2026", "tech": "Photoshop", "ctx": "Match U21 Régional 2, game 7. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Installer un rendez-vous de match reconnaissable, game après game, avec une hiérarchie qui donne l'essentiel en une seconde : adversaire, date, salle.", "q": "BC Roëze-sur-Sarthe (U21)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe."}, {"slug": "roeze-vs-cholet", "t": "Roëze vs Cholet", "y": "2026", "tech": "Photoshop", "ctx": "Match U21 Régional 2, game 8 : le fauve et le médaillon de Cholet Basket. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Jouer avec l'identité de l'adversaire : le fauve et le médaillon de Cholet Basket donnent du caractère au duel.", "q": "BC Roëze-sur-Sarthe (U21)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe."}, {"slug": "gameday-bcr-vs-chalonnes", "t": "Gameday — BCR vs Chalonnes", "y": "2026", "tech": "Photoshop", "ctx": "Match U21 Régional 2, game 9, dimanche 5 avril. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Garder la série cohérente tout en renouvelant le visuel pour le game 9 : même marque de match, nouvelle énergie.", "q": "BC Roëze-sur-Sarthe (U21)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe."}, {"slug": "bcr-vs-mansigne", "t": "BCR vs Mansigné", "y": "2026", "tech": "Photoshop", "ctx": "Match des séniors filles, mis en scène comme un lecteur de musique. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Donner aux séniors filles une affiche à leur image : un lecteur de musique, code du quotidien détourné pour annoncer le match.", "q": "BC Roëze-sur-Sarthe (séniors filles)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe."}, {"slug": "roeze-vs-elan-ligerien-playoff-mode-activated", "t": "Roëze vs Élan ligérien — Playoff mode activated", "y": "2026", "tech": "Photoshop", "ctx": "Match U21 Régional 2, game 10, sous forme de playlist. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Faire sentir que la saison bascule : la playlist « Playoff mode activated » prépare les supporters à la dernière ligne droite.", "q": "BC Roëze-sur-Sarthe (U21)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe."}, {"slug": "job-s-not-finished", "t": "Job's Not Finished", "y": "2026", "tech": "Photoshop", "ctx": "Annonce de la qualification des U21 pour les playoffs régionaux, première de l'histoire du club, façon une de journal. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.75, "b": "Célébrer une qualification historique sans s'arrêter là : la une de journal donne du poids à l'événement, le titre rappelle que l'objectif reste devant.", "q": "BC Roëze-sur-Sarthe (U21)", "u": "Réseaux sociaux du club : annonce.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe."}, {"slug": "demi-finale-bcr-vs-jalt", "t": "Demi-finale — BCR vs JALT", "y": "2026", "tech": "Photoshop", "ctx": "Demi-finale des playoffs U21 Régional 2, 24 mai. Saison 2025-2026.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.75, "b": "Monter d'un cran pour une demi-finale : plus de tension et de contraste pour remplir la salle le 24 mai.", "q": "BC Roëze-sur-Sarthe (U21)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe.", "L": [["demi-finale-bcr-vs-jalt-0.webp", "Photo"], ["demi-finale-bcr-vs-jalt-1.webp", "Étalonnage"], ["demi-finale-bcr-vs-jalt-2.webp", "Texte & infos"]], "lr": 0.75}, {"slug": "welcome-back-maxence", "t": "Welcome Back Maxence", "y": "2026", "tech": "Photoshop", "ctx": "Annonce du retour d'un joueur au club. Saison 2026-2027.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Annoncer un retour au club comme un transfert de pro : valoriser le joueur et fédérer le groupe autour de lui.", "q": "BC Roëze-sur-Sarthe (équipe première)", "u": "Réseaux sociaux du club : annonce.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe.", "L": [["welcome-back-maxence-0.webp", "Fond"], ["welcome-back-maxence-1.webp", "Portrait"], ["welcome-back-maxence-2.webp", "Lumière & textures"], ["welcome-back-maxence-3.webp", "Sujet & texte"]], "lr": 0.5627}, {"slug": "gameday-1er-match-en-r1", "t": "Gameday — 1er match en R1", "y": "2026", "tech": "Photoshop", "ctx": "Premier match en Régional 1 de l'histoire du BC Roëze. Saison 2026-2027.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Marquer l'histoire du club : premier match en Régional 1, une affiche qui doit faire date.", "q": "BC Roëze-sur-Sarthe (équipe première)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe.", "L": [["gameday-1er-match-en-r1-0.webp", "Fond"], ["gameday-1er-match-en-r1-1.webp", "Titre"], ["gameday-1er-match-en-r1-2.webp", "Sujet"], ["gameday-1er-match-en-r1-3.webp", "Infos"]], "lr": 0.5627}, {"slug": "bc-roeze-vs-cholet", "t": "BC Roëze vs Cholet", "y": "2026", "tech": "Photoshop", "ctx": "Deuxième match de la saison. Saison 2026-2027.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Installer l'identité de match de la nouvelle saison dès le deuxième rendez-vous.", "q": "BC Roëze-sur-Sarthe (équipe première)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe."}, {"slug": "derby-seniors-filles-vs-us-coulaines", "t": "Derby — Séniors filles vs US Coulaines", "y": "2026", "tech": "Photoshop", "ctx": "Derby des séniors filles au gymnase de Coulaines. Saison 2026-2027.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Faire monter l'enjeu d'un derby : rivalité locale, déplacement à Coulaines, mobilisation des supporters.", "q": "BC Roëze-sur-Sarthe (séniors filles)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe.", "L": [["derby-seniors-filles-vs-us-coulaines-0.webp", "Fond"], ["derby-seniors-filles-vs-us-coulaines-1.webp", "Lumière & textures"], ["derby-seniors-filles-vs-us-coulaines-2.webp", "Sujet & texte"], ["derby-seniors-filles-vs-us-coulaines-3.webp", "Texte & effets"]], "lr": 0.5627}, {"slug": "gameday-derby-bcr-vs-jalt", "t": "Gameday Derby — BCR vs JALT", "y": "2026", "tech": "Photoshop", "ctx": "Derby face à la JALT, 15 novembre. Saison 2026-2027.", "sub": "BC Roëze", "salle": "Le club", "cat": "clubs", "st": "Officielle", "r": 0.5625, "b": "Le derby de l'année : assumer la rivalité avec la JALT et donner envie d'être dans la salle le 15 novembre.", "q": "BC Roëze-sur-Sarthe (équipe première)", "u": "Réseaux sociaux du club : affiche de match.", "res": "Diffusée par le club sur ses réseaux, pour renforcer la visibilité de l'équipe.", "L": [["gameday-derby-bcr-vs-jalt-0.webp", "Fond"], ["gameday-derby-bcr-vs-jalt-1.webp", "Lumière & textures"], ["gameday-derby-bcr-vs-jalt-2.webp", "Texte & infos"], ["gameday-derby-bcr-vs-jalt-3.webp", "Sujet"]], "lr": 0.5627}, {"slug": "playoff-mode-activated-hermine-de-nantes-vs-ada-blois", "t": "Playoff Mode Activated — Hermine de Nantes vs ADA Blois", "y": "2026", "tech": "Photoshop", "ctx": "Quart de finale des playoffs d'Élite 2 contre l'ADA Blois, dimanche 24 mai. Projet réalisé en cours, dans la continuité de ma saison passée dans les coulisses du club.", "sub": "Championnat de France", "salle": "Championnat de France", "cat": "clubs", "st": "Personnelle", "r": 0.75, "b": "Annoncer le quart de finale des playoffs contre l'ADA Blois en respectant l'identité de l'Hermine (couleurs, partenaires, joueurs) tout en y mettant ma patte.", "q": "Projet de cours à Audencia SciencesCom, autour de l'Hermine de Nantes (Élite 2), club où j'ai travaillé la saison dernière.", "u": "Exercice : annoncer le quart de finale contre l'ADA Blois dans l'identité existante du club.", "res": "Garder ma patte tout en respectant une identité existante : couleurs, partenaires, joueurs.", "L": [["playoff-mode-activated-hermine-de-nantes-vs-ada-blois-0.webp", "Fond"], ["playoff-mode-activated-hermine-de-nantes-vs-ada-blois-1.webp", "Lumière & textures"], ["playoff-mode-activated-hermine-de-nantes-vs-ada-blois-2.webp", "Sujet & texte"], ["playoff-mode-activated-hermine-de-nantes-vs-ada-blois-3.webp", "Premier plan"]], "lr": 0.75}, {"slug": "le-mans-sarthe-basket-quart-de-finale-game-1", "t": "Le Mans Sarthe Basket — Quart de finale, game 1", "y": "2026", "tech": "Photoshop", "ctx": "Quart de finale des playoffs de Betclic Élite, game 1, 25 mai. Création personnelle publiée sur @fl0w_design_.", "sub": "Championnat de France", "salle": "Championnat de France", "cat": "creations", "st": "Personnelle", "r": 0.5625, "b": "Lancer la série de playoffs du MSB : une affiche de game 1 qui annonce la bataille du quart de finale de Betclic Élite.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["le-mans-sarthe-basket-quart-de-finale-game-1-0.webp", "Fond"], ["le-mans-sarthe-basket-quart-de-finale-game-1-1.webp", "Texture & infos"], ["le-mans-sarthe-basket-quart-de-finale-game-1-2.webp", "Sujet"], ["le-mans-sarthe-basket-quart-de-finale-game-1-3.webp", "Photos & logos"]], "lr": 0.5627}, {"slug": "elie-okobo-mvp", "t": "Okobo MVP", "y": "2026", "tech": "Photoshop", "ctx": "Hommage au titre de MVP d'Élie Okobo avec l'AS Monaco. Création personnelle publiée sur @fl0w_design_.", "sub": "Championnat de France", "salle": "Championnat de France", "cat": "creations", "st": "Personnelle", "r": 0.5625, "b": "Rendre hommage au titre de MVP d'Élie Okobo : une image de couronnement, à la hauteur de sa saison avec Monaco.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["elie-okobo-mvp-0.webp", "Fond"], ["elie-okobo-mvp-1.webp", "Lumière & textures"], ["elie-okobo-mvp-2.webp", "Portrait"], ["elie-okobo-mvp-3.webp", "Sujet & lumières"]], "lr": 0.5627}, {"slug": "nba-berlin-game-magic-vs-grizzlies", "t": "NBA Berlin Game — Magic vs Grizzlies", "y": "2026", "tech": "Photoshop", "ctx": "Match NBA à l'Uber Arena de Berlin, 15 janvier : les joueurs dominent la ville la nuit.", "sub": "NBA", "salle": "NBA", "cat": "creations", "st": "Personnelle", "r": 0.75, "b": "Faire exister la NBA en Europe : les joueurs dominent Berlin la nuit, pour que la ville soit aussi star que le match.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "nba-london-game-magic-vs-grizzlies", "t": "NBA London Game — Magic vs Grizzlies", "y": "2026", "tech": "Photoshop", "ctx": "Match NBA à l'O2 Arena de Londres, 18 janvier : les joueurs au-dessus de la Tamise au coucher du soleil.", "sub": "NBA", "salle": "NBA", "cat": "creations", "st": "Personnelle", "r": 0.75, "b": "Même série, autre ville : les joueurs au-dessus de la Tamise au coucher du soleil, l'identité de Londres au service du match.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "dpoy-victor-wembanyama", "t": "DPOY — Victor Wembanyama", "y": "2026", "tech": "Photoshop", "ctx": "Hommage au trophée de Défenseur de l'année de Victor Wembanyama (San Antonio Spurs).", "sub": "NBA", "salle": "NBA", "cat": "creations", "st": "Personnelle", "r": 0.75, "b": "Célébrer le trophée de Défenseur de l'année de Victor Wembanyama : faire ressentir l'envergure et l'impact défensif.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "they-are-back-tatum-brown", "t": "They Are Back — Tatum & Brown", "y": "2026", "tech": "Photoshop", "ctx": "Le retour de Jayson Tatum et Jaylen Brown (Boston Celtics) en playoffs.", "sub": "NBA", "salle": "NBA", "cat": "creations", "st": "Personnelle", "r": 0.75, "b": "Le retour de Tatum et Brown en playoffs : une affiche de retrouvailles, entre héritage des Celtics et tension des playoffs.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["they-are-back-tatum-brown-0.webp", "Fond"], ["they-are-back-tatum-brown-1.webp", "Décor"], ["they-are-back-tatum-brown-2.webp", "Lumière & textures"], ["they-are-back-tatum-brown-3.webp", "Sujet & texte"]], "lr": 0.75}, {"slug": "conference-finals-spurs-vs-thunder", "t": "Conference Finals — Spurs vs Thunder", "y": "2026", "tech": "Photoshop", "ctx": "Finale de conférence Ouest, game 1, 19 mai.", "sub": "NBA", "salle": "NBA", "cat": "creations", "st": "Personnelle", "r": 0.75, "b": "Poser le duel Spurs–Thunder avant le game 1 : deux franchises, une seule place en finale.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["conference-finals-spurs-vs-thunder-0.webp", "Fond"], ["conference-finals-spurs-vs-thunder-1.webp", "Sujet"], ["conference-finals-spurs-vs-thunder-2.webp", "Lumière & textures"], ["conference-finals-spurs-vs-thunder-3.webp", "Titre"]], "lr": 0.75}, {"slug": "uconn-has-a-new-hero-braylon-mullins", "t": "UConn Has a New Hero — Braylon Mullins", "y": "2026", "tech": "Photoshop", "ctx": "Braylon Mullins, nouveau héros de UConn pendant la March Madness.", "sub": "NBA", "salle": "NBA", "cat": "creations", "st": "Personnelle", "r": 0.5625, "b": "Raconter la naissance d'un héros de March Madness : Braylon Mullins au centre, l'émotion du tournoi universitaire.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "duel-of-the-game-uconn-vs-illinois", "t": "Duel of the Game — UConn vs Illinois", "y": "2026", "tech": "Photoshop", "ctx": "Final Four NCAA : duel Braylon Mullins vs Keaton Wagler.", "sub": "NBA", "salle": "NBA", "cat": "creations", "st": "Personnelle", "r": 0.75, "b": "Final Four : transformer le match en duel de joueurs, Mullins contre Wagler, pour donner un récit au match.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "merci-les-bleues", "t": "Merci les Bleues", "y": "2026", "tech": "Photoshop", "ctx": "Hommage à l'équipe de France féminine, vice-championne du monde.", "sub": "Matchs internationaux", "salle": "Matchs internationaux", "cat": "creations", "st": "Personnelle", "r": 0.8, "b": "Dire merci après une médaille d'argent : célébrer le parcours des Bleues plutôt que la défaite en finale.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["merci-les-bleues-0.webp", "Fond"], ["merci-les-bleues-1.webp", "Décor"], ["merci-les-bleues-2.webp", "Titre"], ["merci-les-bleues-3.webp", "Sujet & texte"]], "lr": 0.8}, {"slug": "bastien-grasshoff-equipe-de-france-u20", "t": "Bastien Grasshoff — Équipe de France U20", "y": "2026", "tech": "Photoshop", "ctx": "Bastien Grasshoff sous le maillot de l'équipe de France U20, EuroBasket U20.", "sub": "Matchs internationaux", "salle": "Matchs internationaux", "cat": "creations", "st": "Personnelle", "r": 0.5625, "b": "Mettre en lumière un jeune talent sous le maillot bleu à l'EuroBasket U20.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["bastien-grasshoff-equipe-de-france-u20-0.webp", "Fond"], ["bastien-grasshoff-equipe-de-france-u20-1.webp", "Décor"], ["bastien-grasshoff-equipe-de-france-u20-2.webp", "Sujet"], ["bastien-grasshoff-equipe-de-france-u20-3.webp", "Lumière & textures"]], "lr": 0.5627}, {"slug": "france-2031", "t": "France 2031", "y": "2026", "tech": "Photoshop", "ctx": "Victor Wembanyama géant sur la tour Eiffel, avec le trophée de la Coupe du monde FIBA.", "sub": "Matchs internationaux", "salle": "Matchs internationaux", "cat": "creations", "st": "Personnelle", "r": 0.75, "b": "Projeter le basket français vers la Coupe du monde : Wembanyama géant sur la tour Eiffel, le trophée en ligne de mire.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "japan-2030", "t": "Japan 2030", "y": "2026", "tech": "Photoshop", "ctx": "La Coupe du monde féminine FIBA 2030 imaginée dans un paysage japonais.", "sub": "Matchs internationaux", "salle": "Matchs internationaux", "cat": "creations", "st": "Personnelle", "r": 0.75, "b": "Imaginer la Coupe du monde féminine 2030 au Japon : mêler l'univers japonais et l'énergie du basket.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "on-est-en-ligue-1-le-mans-fc", "t": "On est en Ligue 1 — Le Mans FC", "y": "2026", "tech": "Photoshop", "ctx": "La montée du Mans FC en Ligue 1, supporters devant le stade Marie-Marvingt.", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.7465, "b": "Fêter la montée du Mans FC en Ligue 1 du point de vue des supporters, devant le stade Marie-Marvingt.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["on-est-en-ligue-1-le-mans-fc-0.webp", "Photo"], ["on-est-en-ligue-1-le-mans-fc-1.webp", "Titre"], ["on-est-en-ligue-1-le-mans-fc-2.webp", "Retouches"]], "lr": 0.7464}, {"slug": "the-revenge-real-madrid-vs-bayern-munich", "t": "The Revenge — Real Madrid vs Bayern Munich", "y": "2026", "tech": "Photoshop", "ctx": "Match retour de Ligue des champions, mercredi 14 avril.", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.75, "b": "Raconter une revanche : le match retour Real–Bayern comme un nouveau chapitre d'une rivalité européenne.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["the-revenge-real-madrid-vs-bayern-munich-0.webp", "Fond"], ["the-revenge-real-madrid-vs-bayern-munich-1.webp", "Texte & infos"], ["the-revenge-real-madrid-vs-bayern-munich-2.webp", "Sujet"], ["the-revenge-real-madrid-vs-bayern-munich-3.webp", "Lumière & textures"]], "lr": 0.75}, {"slug": "atletico-vs-arsenal", "t": "Atlético vs Arsenal", "y": "2026", "tech": "Photoshop", "ctx": "Demi-finale de Ligue des champions : le bus d'Arsenal s'invite sur la pelouse.", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.75, "b": "Raconter une demi-finale par un détail : le bus d'Arsenal qui s'invite sur la pelouse.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "finalists-saka-the-new-hero", "t": "Finalists — Saka, the New Hero", "y": "2026", "tech": "Photoshop", "ctx": "Arsenal en finale de Ligue des champions : Bukayo Saka en détective lisant la nouvelle au café.", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.75, "b": "Annoncer la finale d'Arsenal avec un récit : Saka en détective qui découvre la nouvelle au café.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["finalists-saka-the-new-hero-0.webp", "Photo"], ["finalists-saka-the-new-hero-1.webp", "Étalonnage"], ["finalists-saka-the-new-hero-2.webp", "Titre"], ["finalists-saka-the-new-hero-3.webp", "Texte & effets"]], "lr": 0.75}, {"slug": "make-history-ousmane-dembele", "t": "Make History — Ousmane Dembélé", "y": "2026", "tech": "Photoshop", "ctx": "Ousmane Dembélé (PSG) en chevalier, au-dessus de ses adversaires.", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.75, "b": "Faire de Dembélé un chevalier au-dessus de ses adversaires : une image épique pour un moment historique avec le PSG.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["make-history-ousmane-dembele-0.webp", "Décor"], ["make-history-ousmane-dembele-1.webp", "Lumière & textures"], ["make-history-ousmane-dembele-2.webp", "Titre"], ["make-history-ousmane-dembele-3.webp", "Sujet"]], "lr": 0.75}, {"slug": "show-them-michael-olise", "t": "Show Them — Michael Olise", "y": "2026", "tech": "Photoshop", "ctx": "Un enfant en maillot Olise regarde son idole du Bayern à la télé.", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.8003, "b": "Parler de transmission : un enfant en maillot Olise regarde son idole à la télé, le joueur vu par ses fans.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "ballon-d-or-harry-kane", "t": "Ballon d'Or — Harry Kane", "y": "2026", "tech": "Photoshop", "ctx": "Série « Men's Ballon d'Or Nominees » : Harry Kane (Bayern) et ses statistiques.", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.8, "b": "Série des nommés au Ballon d'Or : un format commun qui met les stats en avant, avec Harry Kane comme première carte.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "ballon-d-or-kylian-mbappe", "t": "Ballon d'Or — Kylian Mbappé", "y": "2026", "tech": "Photoshop", "ctx": "Série « Men's Ballon d'Or Nominees » : Kylian Mbappé (Real Madrid).", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.8, "b": "Même série, même grille : Kylian Mbappé avec sa propre personnalité.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_."}, {"slug": "ballon-d-or-ousmane-dembele", "t": "Ballon d'Or — Ousmane Dembélé", "y": "2026", "tech": "Photoshop", "ctx": "Série « Men's Ballon d'Or Nominees » : Ousmane Dembélé (PSG).", "sub": "Football", "salle": "Football", "cat": "football", "st": "Personnelle", "r": 0.8, "b": "Clore la série avec Ousmane Dembélé : la cohérence de série au service du favori.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["ballon-d-or-ousmane-dembele-0.webp", "Fond"], ["ballon-d-or-ousmane-dembele-1.webp", "Infos"], ["ballon-d-or-ousmane-dembele-2.webp", "Sujet"], ["ballon-d-or-ousmane-dembele-3.webp", "Titre"]], "lr": 0.8}, {"slug": "la-naissance-moise-kouame", "t": "La Naissance — Moïse Kouamé", "y": "2026", "tech": "Photoshop", "ctx": "L'éclosion de Moïse Kouamé, jeune espoir du tennis français, sur terre battue. Création personnelle publiée sur @fl0w_design_.", "sub": "Tennis", "salle": "Tennis", "cat": "tennis", "st": "Personnelle", "r": 0.75, "b": "Raconter l'éclosion d'un jeune espoir : Moïse Kouamé sur terre battue, entre promesse et premiers coups d'éclat.", "q": "Création personnelle, compte Instagram @fl0w_design_", "u": "Publication Instagram pour accompagner l'actualité sportive du moment.", "res": "Publiée sur @fl0w_design_.", "L": [["la-naissance-moise-kouame-0.webp", "Fond"], ["la-naissance-moise-kouame-2.webp", "Filigrane"], ["la-naissance-moise-kouame-3.webp", "Sujet & texte"]], "lr": 0.75}];
+const START = 16;
+const CATS = [['all','Tout'],['clubs','Clubs'],['creations','Créations'],['football','Football'],['tennis','Tennis']];
+const RACK = [['Les débuts','Guécélard','tank'],['Le club','BC Roëze','tank'],['Championnat de France','Élite & Betclic Élite','tank'],['NBA','NBA & NCAA','tank'],['Matchs internationaux','Équipes de France','tank'],['Football','Football','shirt'],['Tennis','Tennis','polo']];
+const SPORT = it => it.cat==='football' ? 'football' : it.cat==='tennis' ? 'tennis' : 'basket';
+const SPORT_FR = {basket:'Basket',football:'Football',tennis:'Tennis'};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)], pad = n => String(n).padStart(2,'0');
+const split = t => { const p = t.split(' — '); return [p[0], p.slice(1).join(' — ')]; };
+const BY = Object.fromEntries(ITEMS.map((it,i)=>[it.slug,i]));
+const rig = $('#rig'), W = 220, GAP = 50;
+let list = ITEMS.map((_,i)=>i), cur = 0, target = 0, filter = 'all', drag = null, ready = false;
+
+/* la salle suit l'affiche active */
+let sportOn = '';
+function setStage(it){
+  const s = SPORT(it);
+  if (s !== sportOn){ sportOn = s; $$('.bgl').forEach(el => el.classList.toggle('on', el.dataset.s === s)); $('#sport').textContent = SPORT_FR[s]; }
+}
+const v = $('#vbasket'); v.muted = true; const play = () => v.play().catch(()=>{}); play(); addEventListener('pointerdown', play, {once:true});
+
+/* 01 — plaques de la Rangée */
+const plates = ITEMS.map((it,i) => {
+  const h = Math.round(W / it.r), el = document.createElement('div');
+  el.className = 'plate'; el.style.width = W+'px'; el.style.height = h+'px'; el.style.marginLeft = (-W/2)+'px';
+  el.innerHTML = `<div class="face"><img src="img/t/${it.slug}.webp" alt="${it.t}" loading="lazy" decoding="async"></div><div class="edge"></div>`;
+  el.addEventListener('click', e => { e.stopPropagation(); if (drag && drag.moved) return; const k = list.indexOf(i); if (k < 0) return; if (Math.abs(k - cur) < .5) openSlug(it.slug); else target = k; });
+  rig.appendChild(el); return el;
+});
+const ease = x => x<.5 ? 2*x*x : 1-Math.pow(-2*x+2,2)/2;
+function layout(){
+  plates.forEach((el,i) => {
+    const k = list.indexOf(i);
+    if (k < 0){ el.style.opacity = 0; el.classList.add('hide'); el.style.transform = `translate3d(0,0,${-30*GAP}px)`; return; }
+    const d = k - cur, ad = Math.abs(d);
+    if (ad > (innerWidth < 700 ? 7 : 16)){ el.style.display = 'none'; return; } el.style.display = '';
+    el.classList.remove('hide');
+    const pull = ease(Math.max(0, 1 - ad));
+    const z = (d < 0 ? -d*GAP*0.5 : -d*GAP) + pull*60, x = pull*W*0.8, ry = pull*40;
+    el.style.transform = `translate3d(${x}px,0,${z}px) rotateY(${ry}deg) scale(${1+pull*0.32})`;
+    el.style.opacity = d < -2 ? Math.max(0, 1-(-d-2)/1.5) : (ad > 13 ? Math.max(0, 1-(ad-13)/3) : 1);
+    el.style.pointerEvents = el.style.opacity < .2 ? 'none' : '';
+    el.classList.toggle('dim', ad > .5);
+    el.style.zIndex = Math.round(100 - ad*3);
+  });
+}
+let shown = -1, sweeping = true;
+function info(){
+  if (document.body.classList.contains('inpage') || sweeping) return;
+  const k = Math.round(cur), i = list[Math.max(0, Math.min(list.length-1, k))]; if (i === undefined || i === shown) return; shown = i;
+  const it = ITEMS[i], box = $('#info'), [a, b] = split(it.t);
+  box.innerHTML = `<span class="k">${pad(k+1)} / ${pad(list.length)} — ${it.salle}</span><h1 class="disp">${a}</h1><p>${b || it.sub}</p><a class="btn g" href="#/projet/${it.slug}">Voir le projet<i>→</i></a>`;
+  box.classList.remove('swap-in'); void box.offsetWidth; box.classList.add('swap-in');
+  $('#count').textContent = `${pad(k+1)} / ${pad(list.length)}`;
+  $('#prog').style.width = (list.length>1 ? 100*k/(list.length-1) : 100)+'%';
+  setStage(it);
+}
+
+/* filtres : catégorie (index) ou club (portant) */
+$('#chips').innerHTML = CATS.map(([c,l]) => `<button data-c="${c}" aria-pressed="${c==='all'}">${l}<sup>${c==='all'?ITEMS.length:ITEMS.filter(x=>x.cat===c).length}</sup></button>`).join('');
+$('#chips').onclick = e => { const b = e.target.closest('button'); if (b) setFilter(b.dataset.c); };
+function setFilter(c){
+  filter = c;
+  list = ITEMS.map((_,i)=>i).filter(i => c==='all' || ITEMS[i].cat===c || ('salle:'+ITEMS[i].salle)===c);
+  $$('#chips button').forEach(b => b.setAttribute('aria-pressed', b.dataset.c===c));
+  cur = Math.min(cur, list.length-1) + 3; target = 0; shown = -1; grid();
+  const lab = c === 'all' ? '' : c.startsWith('salle:') ? (RACK.find(r => 'salle:'+r[0] === c) || [,''])[1] : (CATS.find(x => x[0] === c) || [,''])[1];
+  const f = $('#filt'); f.style.display = lab ? '' : 'none'; f.textContent = lab + ' ✕'; f.setAttribute('aria-label', 'Retirer le filtre ' + lab);
+}
+$('#filt').onclick = () => setFilter('all');
+function grid(){
+  $('#grid').innerHTML = list.map(i => `<button data-i="${i}"><img src="img/t/${ITEMS[i].slug}.webp" alt="" loading="lazy"><span>${split(ITEMS[i].t)[0]}</span></button>`).join('');
+}
+$('#grid').onclick = e => { const b = e.target.closest('button'); if (!b) return; target = list.indexOf(+b.dataset.i); location.hash = '#/'; };
+grid();
+
+/* 01 → 01b : la donne — les affiches se distribuent comme des cartes sur une table, à leur place exacte dans l'index */
+let dealing = false;
+function flyToIndex(){
+  if (dealing) return; dealing = true;
+  const act = plates[list[Math.max(0, Math.min(list.length-1, Math.round(cur)))]];
+  const o = act ? act.querySelector('.face').getBoundingClientRect() : {left:innerWidth/2-110, top:innerHeight/2-150, width:220, height:300};
+  const g = $('#grid'); g.classList.add('dealing');
+  history.pushState(null, '', '#/index'); route();          // la page est affichée tout de suite : positions finales fiables
+  $('#index').style.scrollBehavior = 'auto'; $('#index').scrollTop = 0;
+  const cells = [...g.querySelectorAll('button')].map(b => [b, b.querySelector('img').getBoundingClientRect()])
+    .filter(([,r]) => r.width > 0 && r.top < innerHeight + 20);
+  if (!cells.length){ g.classList.remove('dealing'); dealing = false; return; }
+  const ox = o.left + o.width/2, oy = o.top + o.height/2, N = cells.length, STEP = Math.max(34, Math.min(60, 1400/N));
+  let left = N;
+  if (act){ // l'affiche active rejoint le paquet
+    const cv = document.createElement('img'); cv.src = act.querySelector('img').src; cv.className = 'card-deal'; cv.alt = '';
+    Object.assign(cv.style, {left:o.left+'px', top:o.top+'px', width:o.width+'px', height:o.height+'px', zIndex: 300});
+    document.body.appendChild(cv);
+    cv.animate([{opacity:1, transform:'none'}, {opacity:0, transform:'scale(.97)'}], {duration:320, delay:120, easing:'ease', fill:'forwards'}).onfinish = () => cv.remove();
+  }
+  cells.forEach(([b,r],n) => {
+    const c = document.createElement('img'); c.src = b.querySelector('img').src; c.className = 'card-deal'; c.alt = '';
+    Object.assign(c.style, {left:r.left+'px', top:r.top+'px', width:r.width+'px', height:r.height+'px', zIndex: 200 + N - n});
+    document.body.appendChild(c);
+    const dx = ox - (r.left + r.width/2), dy = oy - (r.top + r.height/2), k = o.width / r.width;
+    const r0 = ((n*37) % 11 - 5) * 1.6, lift = -Math.min(90, 30 + Math.hypot(dx,dy)*.08);
+    const deck = `translate(${dx + n*.35}px,${dy - n*.5}px) rotate(${r0*.25}deg) scale(${k})`;
+    const anim = c.animate([
+      {transform: deck, boxShadow:'0 2px 6px rgba(0,0,0,.5)', offset:0},
+      {transform: deck, boxShadow:'0 2px 6px rgba(0,0,0,.5)', offset:.001},
+      {transform: `translate(${dx*.45}px,${dy*.45 + lift}px) rotate(${r0}deg) scale(${1 + (k-1)*.35 + .06})`, boxShadow:'0 40px 60px -20px rgba(0,0,0,.85)', offset:.55},
+      {transform: `translate(0,-3px) rotate(${-r0*.08}deg) scale(1.015)`, boxShadow:'0 10px 22px -10px rgba(0,0,0,.8)', offset:.86},
+      {transform: 'none', boxShadow:'0 6px 14px -8px rgba(0,0,0,.7)', offset:1}
+    ], {duration: 640, delay: 260 + n*STEP, easing:'cubic-bezier(.25,.7,.2,1)', fill:'backwards'});
+    anim.onfinish = () => {
+      b.classList.add('landed'); c.remove();
+      if (--left === 0){ g.classList.remove('dealing'); g.querySelectorAll('.landed').forEach(x => x.classList.remove('landed')); dealing = false; }
+    };
+  });
+}
+
+/* défilement de la Rangée */
+const clampT = () => { target = Math.max(0, Math.min(list.length-1, target)); };
+const used = () => { $('#hint').style.opacity = 0; };
+let wheelT, over = 0;
+addEventListener('wheel', e => {
+  if (document.body.classList.contains('inpage') || !ready) return; used();
+  const dv = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+  if (dv > 0 && Math.round(target) >= list.length-1){ over += dv; if (over > 600){ over = 0; flyToIndex(); } return; }
+  over = 0; target += dv / 140; clampT(); clearTimeout(wheelT); wheelT = setTimeout(()=>{ target = Math.round(target); }, 140);
+}, {passive:true});
+addEventListener('keydown', e => {
+  if ($('#viewer').classList.contains('on')){ if (e.key==='Escape') closeViewer(); if (e.key==='ArrowRight') stepViewer(1); if (e.key==='ArrowLeft') stepViewer(-1); return; }
+  if ($('#contact').classList.contains('on')){ if (e.key==='Escape') closeContact(); return; }
+  if (document.body.classList.contains('inpage')){ if (e.key==='Escape') location.hash = '#/'; return; }
+  if (!ready) return;
+  if (['ArrowRight','ArrowDown'].includes(e.key)){ used(); if (Math.round(target) >= list.length-1) flyToIndex(); else { target = Math.round(target)+1; clampT(); } }
+  if (['ArrowLeft','ArrowUp'].includes(e.key)){ used(); target = Math.round(target)-1; clampT(); }
+  if (e.key==='Enter') openSlug(ITEMS[list[Math.round(cur)]].slug);
+});
+$('#scene').addEventListener('pointerdown', e => { drag = {x:e.clientX, t:target, moved:false}; });
+addEventListener('pointermove', e => { if (!drag) return; const dx = e.clientX - drag.x; if (Math.abs(dx) > 4){ drag.moved = true; used(); } target = drag.t - dx/70; clampT(); });
+addEventListener('pointerup', () => { if (drag){ target = Math.round(target); clampT(); setTimeout(()=>{ drag = null; }, 0); } });
+
+/* 02 — fiche projet */
+const openSlug = slug => { location.hash = '#/projet/' + slug; };
+let pi = 0, mx = 0, my = 0, explode = 0, xw = 390;
+function fillProject(i){
+  pi = i; const it = ITEMS[i], [a, b] = split(it.t), k = list.indexOf(i) >= 0 ? list.indexOf(i) : i;
+  const L = list.includes(i) ? list : ITEMS.map((_,j)=>j), n = ITEMS[L[(L.indexOf(i)+1) % L.length]], p = ITEMS[L[(L.indexOf(i)-1+L.length) % L.length]];
+  $('#p-crumb').textContent = `${it.salle} — ${it.y}`;
+  $('#p-title').textContent = a; $('#p-title').style.fontSize = a.length > 22 ? 'clamp(46px,5vw,80px)' : '';
+  $('#p-sub').textContent = b || it.sub;
+  $('#p-brief').textContent = it.b;
+  $('#p-chips').innerHTML = [it.st, it.tech, SPORT_FR[SPORT(it)], it.y].map(x => `<span class="pill g">${x}</span>`).join('');
+  $('#p-img').src = `img/f/${it.slug}.webp`; $('#p-img').alt = it.t;
+  $('#p-ctx').textContent = it.ctx; $('#p-q').textContent = it.q; $('#p-u').textContent = it.u; $('#p-r').textContent = it.res;
+  $('#p-nexta').href = '#/projet/' + n.slug; $('#p-nimg').src = `img/t/${n.slug}.webp`; $('#p-ncrumb').textContent = `${n.salle} — ${n.y}`; $('#p-ntitle').textContent = split(n.t)[0];
+  $('#p-preva').href = '#/projet/' + p.slug;
+  const pos = [['50% 50%','100%','L\'affiche'],['50% 12%','260%','Le titre'],['50% 55%','230%','Le sujet'],['50% 92%','260%','Les infos']];
+  $('#stack').innerHTML = pos.map(([bp,bs,l]) => `<button class="card" style="background-image:url(img/f/${it.slug}.webp);background-position:${bp};background-size:${bs === '100%' ? 'cover' : bs}" aria-label="${l}"><span class="pill g tag">${l}</span></button>`).join('');
+  fillFormats(it);
+  buildX(it); setStage(it); $('#proj').scrollTop = 0; explode = 0; placeX();
+}
+const LDESC = {
+  'Fond':"La base : la couleur ou la matière sur laquelle tout se pose.",
+  'Décor':"Le décor : la scène qui plante l'ambiance.",
+  'Photo':"La photo de départ, avant tout travail.",
+  'Sujet':"Le sujet : les joueurs détourés, au centre de l'histoire.",
+  'Lumière & textures':"Lumières et textures : halos, grain, reflets, la matière de l'image.",
+  'Étalonnage':"L'étalonnage : couleurs et contrastes qui donnent l'ambiance finale.",
+  'Texte & infos':"Le texte : titre, date, lieu, la hiérarchie de lecture.",
+  'Titre':"Le titre : le mot qui accroche en premier.",
+  'Infos':"Les infos pratiques : date, heure, lieu, logos.",
+  'Sujet & texte':"Le sujet et le texte imbriqués, pour jouer sur la profondeur.",
+  'Sujet & lumières':"Le sujet et ses lumières.",
+  'Texte & effets':"Le texte et ses finitions : lueurs, textures, détails.",
+  'Fond & textures':"Le fond et ses textures.",
+  'Premier plan':"Le premier plan : ce qui passe devant tout le reste.",
+  'Graphismes':"Les éléments graphiques : formes, cadres, pictos.",
+  'Portrait':"Le portrait : le visage qui porte l'émotion.",
+  'Photos':"Les photos du match, mises en scène.",
+  'Photos & logos':"Les photos du match et les logos des clubs.",
+  'Texture & infos':"La texture et les infos pratiques.",
+  'Filigrane':"Le filigrane : un motif en fond qui signe l'univers.",
+  'Retouches':"Les retouches : ombres, reflets et détails de finition."
+};
+const FALLBACK = [['back','Fond',"Le fond : l'ambiance et la lumière qui portent tout le reste."],['poster','Affiche',"L'affiche : le sujet, la composition, la hiérarchie de l'info."],['glass','Verre',"Le verre : reflets et matière, la finition."],['frame','Cadre',"Le cadre : le format final, prêt à publier."]];
+function fillFormats(it){
+  const sec = $('#p-formats'), row = $('#p-frow');
+  if (!it.v){ sec.style.display = 'none'; row.innerHTML = ''; return; }
+  sec.style.display = '';
+  const avail = Math.min(innerWidth - 2*parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pad') || 40), 1100) - 32*(it.v.length-1) - 20*it.v.length;
+  const h = Math.max(180, Math.min(560, innerHeight*.62, avail / it.v.reduce((a,v) => a + v[2], 0)));
+  row.innerHTML = it.v.map(([src,l,r],k) => `<figure><button class="fm g" data-k="${k}" style="height:${h+20}px;width:${h*r+20}px" aria-label="Ouvrir le format ${l}"><img src="${src}" alt="${it.t} — ${l}" loading="lazy"></button><figcaption>${l}</figcaption></figure>`).join('');
+}
+$('#p-frow').onclick = e => { const b = e.target.closest('.fm'); if (!b) return; const v = ITEMS[pi].v[+b.dataset.k]; openViewer(pi, v[0], v[1]); };
+function buildX(it){
+  const r = it.L ? it.lr : it.r;
+  const h = Math.min(innerHeight*0.56, 520, innerWidth*0.62/r), w = h*r, xr = $('#xrig'); xw = w;
+  const box = `width:${w}px;height:${h}px;left:${-w/2}px;top:${-h/2}px`;
+  let steps;
+  if (it.L){
+    xr.innerHTML = it.L.map(([f,l],k) => `<div class="ly psd${k===0?' base':''}" data-k="${k}" style="${box}"><img src="img/l/${f}" alt="" decoding="async"><span class="lbl g">${l}</span></div>`).join('')
+      + `<div class="ly cover" style="${box}"><img src="img/f/${it.slug}.webp" alt=""></div>`;
+    steps = it.L.map(([,l]) => [l, LDESC[l] || '']);
+    $('#p-lintro').textContent = `Les calques du vrai fichier Photoshop, regroupés en ${it.L.length} plaques de verre.`;
+    $('#p-lnote').textContent = 'Calques réels du PSD · regroupés pour rester lisibles';
+  } else {
+    xr.innerHTML = FALLBACK.map(([c,l],k) => `<div class="ly ${c}" data-k="${k}" style="${box}">${c==='back'||c==='poster'?`<img src="img/f/${it.slug}.webp" alt="">`:''}<span class="lbl g">${l}</span></div>`).join('');
+    steps = FALLBACK.map(([,l,d]) => [l, d]);
+    $('#p-lintro').textContent = "Chaque couche de l'affiche posée sur sa propre plaque de verre.";
+    $('#p-lnote').textContent = 'Aperçu · pas de PSD détaillé pour cette affiche';
+  }
+  $('#p-steps').innerHTML = steps.map(([l,d],k) => `<li data-k="${k}"><b>${String(k+1).padStart(2,'0')}</b><span><strong>${l}</strong> — ${d.replace(/^[^:]+ : /,'')}</span></li>`).join('');
+}
+function placeX(){
+  const ls = $$('#xrig .ly:not(.cover)'), N = ls.length, mid = (N-1)/2, gap = xw*(N > 4 ? .31 : .38), sx = xw*.165;
+  ls.forEach((el,k) => { const z = (k-mid)*(2 + explode*gap), x = -(k-mid)*explode*sx; el.style.transform = `translate3d(${x}px,0,${z}px)`; el.querySelector('.lbl').style.opacity = explode > .3 ? 1 : 0; });
+  const cv = $('#xrig .cover');
+  if (cv){ cv.style.transform = `translate3d(${-mid*explode*sx}px,0,${mid*(2+explode*gap)+3}px)`; cv.style.opacity = Math.max(0, 1 - explode/.16); }
+  let last = 0; $$('#p-steps li').forEach((li,k) => { const on = explode > .05 + k*(.8/Math.max(1,N)); li.classList.toggle('on', on); if (on) last = k; });
+  $$('#p-steps li').forEach((li,k) => li.classList.toggle('cur', k === last));
+}
+$('#p-steps').addEventListener('pointerover', e => { const li = e.target.closest('li'); if (!li) return; $$('#xrig .ly:not(.cover)').forEach(el => el.classList.toggle('dim', el.dataset.k !== li.dataset.k)); });
+$('#p-steps').addEventListener('pointerleave', () => $$('#xrig .ly').forEach(el => el.classList.remove('dim')));
+$('#proj').addEventListener('scroll', () => {
+  const s = $('#p-layers'), r = s.getBoundingClientRect(), span = s.offsetHeight - innerHeight;
+  explode = span > 0 ? Math.max(0, Math.min(1, -r.top / (span*(MOB() ? .92 : .8)))) : 1; placeX();
+}, {passive:true});
+$('#proj').addEventListener('pointermove', e => { mx = (e.clientX/innerWidth - .5); my = (e.clientY/innerHeight - .5); });
+$('#p-poster').onclick = () => openViewer(pi);
+$('#stack').onclick = e => { if (e.target.closest('.card')) openViewer(pi); };
+
+/* 06 — plein écran avec loupe */
+let vi = 0;
+function openViewer(i, src, sub){ vi = i; const it = ITEMS[i]; $('#v-img').src = src || `img/f/${it.slug}.webp`; $('#v-title').textContent = split(it.t)[0] + (sub ? ' · ' + sub.split(' · ')[0] : ''); $('#viewer').classList.add('on'); }
+let vz = {s:1,x:0,y:0}; const vpts = new Map(); let vst = null, vtap = 0, vmoved = false;
+const vApply = () => { $('#v-img').style.transform = vz.s === 1 && !vz.x && !vz.y ? '' : `translate(calc(-50% + ${vz.x}px),calc(-50% + ${vz.y}px)) scale(${vz.s})`; };
+const vReset = () => { vz = {s:1,x:0,y:0}; vApply(); };
+$('#viewer').addEventListener('pointerdown', e => {
+  if (e.pointerType === 'mouse') return;
+  vpts.set(e.pointerId, {x:e.clientX, y:e.clientY}); vmoved = false;
+  if (vpts.size === 2){ const [a,b] = [...vpts.values()]; vst = {d:Math.hypot(a.x-b.x, a.y-b.y), s:vz.s}; }
+  else if (vpts.size === 1){
+    vst = {px:e.clientX, py:e.clientY, x:vz.x, y:vz.y};
+    const now = Date.now(); if (now - vtap < 300 && e.target.id === 'v-img'){ if (vz.s > 1) vReset(); else { vz = {s:2.6, x:0, y:0}; vApply(); } vmoved = true; } vtap = now;
+  }
+});
+$('#viewer').addEventListener('pointermove', e => {
+  if (!vpts.has(e.pointerId)) return; vpts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (vpts.size === 2 && vst && vst.d){ const [a,b] = [...vpts.values()]; vz.s = Math.max(1, Math.min(5, vst.s * Math.hypot(a.x-b.x, a.y-b.y) / vst.d)); vmoved = true; vApply(); }
+  else if (vpts.size === 1 && vz.s > 1 && vst && vst.px !== undefined){ vz.x = vst.x + e.clientX - vst.px; vz.y = vst.y + e.clientY - vst.py; vmoved = true; vApply(); }
+});
+const vUp = e => { vpts.delete(e.pointerId); if (vpts.size === 1){ const p = [...vpts.values()][0]; vst = {px:p.x, py:p.y, x:vz.x, y:vz.y}; } if (vz.s <= 1.02) vReset(); };
+$('#viewer').addEventListener('pointerup', vUp); $('#viewer').addEventListener('pointercancel', vUp);
+function closeViewer(){ vReset(); $('#viewer').classList.remove('on'); $('#loupe').style.opacity = 0; }
+function stepViewer(d){ const L = list.includes(vi) ? list : ITEMS.map((_,j)=>j); openViewer(L[(L.indexOf(vi)+d+L.length) % L.length]); }
+$('#vclose').onclick = closeViewer; $('#vprev').onclick = () => stepViewer(-1); $('#vnext').onclick = () => stepViewer(1);
+$('#viewer').addEventListener('pointermove', e => {
+  const img = $('#v-img'), r = img.getBoundingClientRect(), lp = $('#loupe'), Z = 2.6;
+  const inside = e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom && e.pointerType === 'mouse';
+  lp.style.opacity = inside ? 1 : 0; if (!inside) return;
+  lp.style.left = e.clientX+'px'; lp.style.top = e.clientY+'px';
+  lp.style.backgroundImage = `url(${img.src})`; lp.style.backgroundSize = `${r.width*Z}px ${r.height*Z}px`;
+  lp.style.backgroundPosition = `${-(e.clientX-r.left)*Z+110}px ${-(e.clientY-r.top)*Z+110}px`;
+});
+$('#viewer').addEventListener('click', e => { if (e.target.id === 'viewer' && !vmoved && vz.s === 1) closeViewer(); });
+
+/* 04 — régie : chiffres et portant des clubs */
+const off = ITEMS.filter(x=>x.st==='Officielle').length, years = ITEMS.map(x=>+x.y).filter(Boolean);
+$('#board').innerHTML = [[ITEMS.length,'affiches'],[off,'pour des clubs'],[3,'sports'],[`${Math.min(...years)}`,'première affiche']].map(([n,l])=>`<div class="cell g"><b>${n}</b><span class="k">${l}</span></div>`).join('');
+const SHAPES = {
+  tank:'M34 26 Q50 40 66 26 L80 30 Q76 50 82 62 L82 150 L18 150 L18 62 Q24 50 20 30 Z',
+  shirt:'M36 26 Q50 38 64 26 L92 38 L84 64 L74 60 L74 150 L26 150 L26 60 L16 64 L8 38 Z',
+  polo:'M38 26 L50 40 L62 26 L92 38 L84 64 L74 60 L74 150 L26 150 L26 60 L16 64 L8 38 Z M44 30 L50 52 L56 30'
+};
+$('#hang').innerHTML = RACK.map(([s,l,t]) => { const n = ITEMS.filter(x=>x.salle===s).length;
+  return `<button class="jersey" data-s="${s}" aria-label="${l} : ${n} affiches"><svg viewBox="0 0 100 156" aria-hidden="true"><path class="hook" d="M50 2 q7 0 7 7 q0 6 -7 8 L50 22 M50 22 L30 28 M50 22 L70 28"/><path class="shirt" d="${SHAPES[t]}"/><text class="num" x="50" y="${t==='tank'?110:112}" text-anchor="middle">${n}</text></svg><span class="name">${l}</span></button>`; }).join('');
+const MOB = () => innerWidth < 700;
+const goSalle = s => { setFilter('salle:'+s); location.hash = '#/'; };
+$('#hang').onclick = e => {
+  const b = e.target.closest('.jersey'); if (!b) return;
+  if (!MOB() || b.classList.contains('sel')) return goSalle(b.dataset.s);
+  $$('.jersey').forEach(j => j.classList.toggle('sel', j === b));
+  const r = RACK.find(x => x[0] === b.dataset.s), n = ITEMS.filter(x=>x.salle===b.dataset.s).length;
+  $('#rackcap').innerHTML = `<b>${r[1]}</b><button class="g" type="button">Voir les ${n} affiche${n>1?'s':''} →</button>`;
+  $('#rackcap button').onclick = () => goSalle(b.dataset.s);
+};
+
+/* 05 — contact */
+function openContact(){ $('#contact').classList.add('on'); setNav('contact'); }
+function closeContact(){ $('#contact').classList.remove('on'); setNav(location.hash); }
+$('#cclose').onclick = closeContact; $('#contact').addEventListener('click', e => { if (e.target.id === 'contact') closeContact(); });
+$$('[data-copy]').forEach(b => b.onclick = () => { navigator.clipboard?.writeText(b.dataset.copy).then(()=>{ b.textContent = 'Copié'; setTimeout(()=>b.textContent='Copier', 1500); }).catch(()=>{}); });
+
+/* navigation : une adresse par page (#/, #/index, #/projet/…, #/regie) */
+document.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (!b) return; e.preventDefault(); if (b.dataset.go === 'contact') openContact(); else location.hash = b.dataset.go; });
+function setNav(h){ $$('#nav button').forEach(b => b.setAttribute('aria-current', b.dataset.go === h || (b.dataset.go === '#/' && (h === '#/' || h.startsWith('#/projet'))) )); }
+function route(){
+  const h = location.hash || '#/';
+  closeViewer(); $('#contact').classList.remove('on');
+  ['proj','index','regie'].forEach(id => $('#'+id).classList.remove('on')); $('#offside').classList.remove('on');
+  let page = null;
+  if (h === '#/' || h === '#' || h === '') {}
+  else if (h === '#/entree') { replayIntro(); return; }
+  else if (h === '#/index') page = 'index';
+  else if (h === '#/regie') page = 'regie';
+  else if (h.startsWith('#/projet/') && BY[h.slice(9)] !== undefined) { fillProject(BY[h.slice(9)]); page = 'proj'; }
+  else { $('#offside').classList.add('on'); }
+  if (page){ $('#'+page).classList.add('on'); if (page !== 'proj') $('#'+page).scrollTop = 0; }
+  document.body.classList.toggle('inpage', !!page);
+  if (!page){ shown = -1; if (h.startsWith('#/') && h.length <= 2) {} }
+  setNav(page === 'proj' ? '#/' : h);
+  if (page === 'proj'){ const k = list.indexOf(pi); if (k >= 0){ target = k; cur = k; } }
+}
+addEventListener('hashchange', route);
+
+/* téléphone : l'affiche active tient entière entre le menu et le titre, au centre */
+let mS = .62, mX = 0, mY = 0;
+function fitMobile(){
+  if (!MOB()){ if (rig.style.transform) rig.style.transform = ''; return; }
+  if (document.body.classList.contains('inpage')) return;
+  const a = plates[list[Math.max(0, Math.min(list.length-1, Math.round(cur)))]]; if (!a) return;
+  const r = a.querySelector('.face').getBoundingClientRect(), ib = $('#info').getBoundingClientRect();
+  const top = 116, bot = ib.top - 16;
+  if (r.height > 0 && Math.abs(target - cur) < .35){
+    const sc = Math.min((bot - top) / r.height, innerWidth*.84 / r.width);
+    mS = Math.max(.3, Math.min(1.2, mS * (1 + (sc - 1)*.18)));
+    mX += (innerWidth/2 - (r.left + r.width/2))*.18; mY += ((top + bot)/2 - (r.top + r.height/2))*.18;
+  }
+  rig.style.transform = `translate(${mX}px,${mY}px) scale(${mS}) rotateX(9deg) rotateY(-40deg)`;
+}
+
+/* boucle */
+function tick(){
+  cur += (target - cur) * 0.11; if (Math.abs(target-cur) < .001) cur = target;
+  if (sweeping && !document.body.classList.contains('intro') && Math.abs(target-cur) < .6){ sweeping = false; document.body.classList.remove('sweep'); }
+  layout(); info(); fitMobile();
+  if (document.body.classList.contains('inpage')) $('#xrig').style.transform = `translateX(${explode*xw*.3}px) scale(${1 - explode*(innerWidth < 700 ? .3 : .1)}) rotateY(${-22 - explode*20 + mx*30}deg) rotateX(${6 + explode*4 - my*12}deg)`;
+  requestAnimationFrame(tick);
+}
+
+/* 00 — tunnel (1re visite) · 00b — retour rapide */
+function tunnel(done){
+  const T = $('#tunnel'), tv = $('#tv'); let stop = false;
+  T.style.display = ''; T.style.opacity = 1; T.classList.remove('go','out','blocked'); tv.currentTime = 0;
+  const finish = (lit) => { if (stop) return; stop = true; v.currentTime = 0; play();
+    if (lit === true){ $('#flash').classList.remove('on'); void $('#flash').offsetWidth; $('#flash').classList.add('on'); setTimeout(()=>{ T.style.display = 'none'; done(); }, 380); }
+    else { T.style.opacity = 0; setTimeout(()=>{ T.style.display = 'none'; }, 1400); done(); } };
+  $('#skip').onclick = finish; T.onwheel = finish;
+  tv.muted = true;
+  tv.ontimeupdate = () => { if (!tv.duration) return; if (tv.currentTime > tv.duration - 3.2) T.classList.add('out'); if (tv.currentTime > tv.duration - 0.25) finish(true); };
+  tv.onended = () => finish(true); tv.onerror = finish;
+  const sk = $('#skip'); sk.textContent = 'Passer →';
+  const started = () => { setTimeout(()=>T.classList.add('go'), 500); setTimeout(()=>{ if (!stop && tv.currentTime < 0.2) finish(); }, 9000); };
+  tv.play().then(started).catch(()=>{
+    // lecture automatique refusée (mode économie d'énergie, etc.) : un toucher lance la vidéo
+    sk.textContent = 'Entrer ▶'; T.classList.add('blocked'); setTimeout(()=>T.classList.add('go'), 300);
+    sk.onclick = () => { T.classList.remove('blocked'); sk.textContent = 'Passer →'; sk.onclick = finish; tv.play().then(started).catch(finish); };
+  });
+}
+function loader(done){
+  $('#tunnel').style.display = 'none'; const L = $('#loader'); L.style.display = ''; L.style.opacity = 1;
+  setTimeout(()=>{ L.style.opacity = 0; done(); setTimeout(()=>{ L.style.display = 'none'; }, 1300); }, 1100);
+}
+const enter = () => { document.body.classList.remove('intro'); ready = true; target = list.indexOf(START) >= 0 ? list.indexOf(START) : 0; };
+function replayIntro(){ document.body.classList.add('intro','sweep'); sweeping = true; cur = target = list.length + 8; history.replaceState(null, '', '#/'); route(); tunnel(()=>setTimeout(enter, 150)); }
+
+/* démarrage */
+addEventListener('resize', layout);
+cur = target = list.length + 8; setStage(ITEMS[START]);
+const startHash = location.hash;
+if (startHash === '#/entree') history.replaceState(null, '', '#/');
+route();
+if (matchMedia('(prefers-reduced-motion: reduce)').matches){ $('#tunnel').style.display = 'none'; cur = START; enter(); }
+else {
+  let again = false; try { const nav = performance.getEntriesByType('navigation')[0]; again = sessionStorage.getItem('fb_in') === '1' && (!nav || nav.type === 'reload' || nav.type === 'back_forward'); sessionStorage.setItem('fb_in','1'); } catch(e){}
+  if (again && startHash !== '#/entree') loader(()=>setTimeout(enter, 150)); else tunnel(()=>setTimeout(enter, 150));
+}   // le tunnel joue à chaque arrivée sur le site
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
